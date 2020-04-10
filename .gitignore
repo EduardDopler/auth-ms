@@ -1,0 +1,13 @@
+# OS
+.DS_Store
+
+# build output
+target/
+
+# IntelliJ
+*.iml
+!/.idea/*.iml
+/.idea/libraries/
+/.idea/dictionaries
+/.idea/tasks.xml
+/.idea/usage.statistics.xml
