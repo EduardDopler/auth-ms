@@ -22,6 +22,8 @@
     <maven.compiler.release>11</maven.compiler.release>
     <!-- Other dependencies and plugins -->
     <surefire-plugin.version>2.22.1</surefire-plugin.version>
+    <wildfly-elytron.version>1.11.3.Final</wildfly-elytron.version>
+    <jdt.annotation.version>2.2.400</jdt.annotation.version>
   </properties>
 
   <dependencyManagement>
@@ -37,6 +39,7 @@
   </dependencyManagement>
 
   <dependencies>
+    <!-- WS/RS -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy</artifactId>
@@ -45,9 +48,35 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-jsonb</artifactId>
     </dependency>
+    <!-- REST client -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-client</artifactId>
+    </dependency>
+    <!-- JDBC -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-agroal</artifactId>
+    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-jdbc-h2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-jwt</artifactId>
+    </dependency>
+    <!-- bcrypt -->
+    <dependency>
+      <groupId>org.wildfly.security</groupId>
+      <artifactId>wildfly-elytron-password-impl</artifactId>
+      <version>${wildfly-elytron.version}</version>
+    </dependency>
+    <!-- annotations -->
+    <dependency>
+      <groupId>org.eclipse.jdt</groupId>
+      <artifactId>org.eclipse.jdt.annotation</artifactId>
+      <version>${jdt.annotation.version}</version>
     </dependency>
     <!-- Tests -->
     <dependency>
@@ -66,7 +95,6 @@
     <finalName>${project.artifactId}</finalName>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${compiler-plugin.version}</version>
         <configuration>
