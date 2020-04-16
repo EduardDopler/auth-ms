@@ -8,6 +8,7 @@
       <list>
         <option value="$PROJECT_DIR$/jwt-server/pom.xml" />
         <option value="$PROJECT_DIR$/login-server/pom.xml" />
+        <option value="$PROJECT_DIR$/server-timings/pom.xml" />
       </list>
     </option>
   </component>

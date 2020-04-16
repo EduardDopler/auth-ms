@@ -22,6 +22,7 @@
     <maven.compiler.release>11</maven.compiler.release>
     <!-- Other dependencies and plugins -->
     <surefire-plugin.version>2.22.1</surefire-plugin.version>
+    <server-timings.version>1.0</server-timings.version>
   </properties>
 
   <dependencyManagement>
@@ -48,6 +49,12 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-jwt</artifactId>
+    </dependency>
+    <!-- other microservices and ms-utils -->
+    <dependency>
+      <groupId>de.dopler.ms</groupId>
+      <artifactId>server-timings</artifactId>
+      <version>${server-timings.version}</version>
     </dependency>
     <!-- Tests -->
     <dependency>

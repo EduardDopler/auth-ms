@@ -6,13 +6,15 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="jwt-server" />
         <module name="login-server" />
+        <module name="jwt-server" />
+        <module name="server-timings" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="jwt-server" target="11" />
       <module name="login-server" target="11" />
+      <module name="server-timings" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="TypeScriptCompiler">

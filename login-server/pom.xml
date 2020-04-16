@@ -24,6 +24,7 @@
     <surefire-plugin.version>2.22.1</surefire-plugin.version>
     <wildfly-elytron.version>1.11.3.Final</wildfly-elytron.version>
     <jdt.annotation.version>2.2.400</jdt.annotation.version>
+    <server-timings.version>1.0</server-timings.version>
   </properties>
 
   <dependencyManagement>
@@ -77,6 +78,12 @@
       <groupId>org.eclipse.jdt</groupId>
       <artifactId>org.eclipse.jdt.annotation</artifactId>
       <version>${jdt.annotation.version}</version>
+    </dependency>
+    <!-- other microservices and ms-utils -->
+    <dependency>
+      <groupId>de.dopler.ms</groupId>
+      <artifactId>server-timings</artifactId>
+      <version>${server-timings.version}</version>
     </dependency>
     <!-- Tests -->
     <dependency>
