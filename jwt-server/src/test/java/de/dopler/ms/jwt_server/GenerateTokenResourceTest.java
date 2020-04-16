@@ -17,8 +17,8 @@ import javax.ws.rs.core.Response.Status;
 import java.net.URI;
 import java.time.Clock;
 import java.time.Instant;
+import java.util.Random;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Stream;
 
 import static de.dopler.ms.jwt_server.GenerateTokenService.EXPIRATION_ACCESS_TOKEN;
@@ -112,14 +112,14 @@ class GenerateTokenResourceTest {
 
         assertThat(accessToken.getIssuer(), is(equalTo(GenerateTokenService.ISSUER)));
         assertThat(accessToken.getSubject(), is(equalTo(GenerateTokenService.SUBJECT_ACCESS)));
-        assertThat(accessToken.getName(), is(equalTo(inputUser.id)));
+        assertThat(Long.valueOf(accessToken.getName()), is(equalTo(inputUser.id)));
         assertThat(accessToken.getGroups(), containsInAnyOrder(inputUser.groups.toArray()));
     }
 
     @Test
     void forUserEndpointReturnsCode400OnInvalidUser() {
         User userWithNullId = new User(null, Set.of("group1"));
-        User userWithNullGroups = new User(UUID.randomUUID().toString(), null);
+        User userWithNullGroups = new User(new Random().nextLong(), null);
         // @formatter:off
         givenPostToEndpoint(userWithNullId).then()
             .statusCode(Status.BAD_REQUEST.getStatusCode());
@@ -136,6 +136,6 @@ class GenerateTokenResourceTest {
     }
 
     private static User randomUser() {
-        return new User(UUID.randomUUID().toString(), Set.of("group1", "group2", "group3"));
+        return new User(new Random().nextLong(), Set.of("group1", "group2", "group3"));
     }
 }
