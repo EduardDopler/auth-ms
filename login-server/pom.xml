@@ -24,7 +24,7 @@
     <surefire-plugin.version>2.22.1</surefire-plugin.version>
     <wildfly-elytron.version>1.11.3.Final</wildfly-elytron.version>
     <jdt.annotation.version>2.2.400</jdt.annotation.version>
-    <server-timings.version>1.0</server-timings.version>
+    <server-timings.version>1.0.1</server-timings.version>
   </properties>
 
   <dependencyManagement>

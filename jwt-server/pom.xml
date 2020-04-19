@@ -22,7 +22,7 @@
     <maven.compiler.release>11</maven.compiler.release>
     <!-- Other dependencies and plugins -->
     <surefire-plugin.version>2.22.1</surefire-plugin.version>
-    <server-timings.version>1.0</server-timings.version>
+    <server-timings.version>1.0.1</server-timings.version>
   </properties>
 
   <dependencyManagement>
@@ -38,6 +38,7 @@
   </dependencyManagement>
 
   <dependencies>
+    <!-- WS/RS -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy</artifactId>
@@ -46,6 +47,7 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-jsonb</artifactId>
     </dependency>
+    <!-- JWT -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-jwt</artifactId>
