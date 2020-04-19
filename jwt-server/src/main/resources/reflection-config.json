@@ -6,12 +6,6 @@
     "allDeclaredMethods": true,
     "allPublicMethods": true,
     "allDeclaredClasses": true,
-    "allPublicClasses": true,
-    "methods": [
-      {
-        "name": "claims",
-        "parameterTypes": []
-      }
-    ]
+    "allPublicClasses": true
   }
 ]
