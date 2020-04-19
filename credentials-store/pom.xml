@@ -1,11 +1,11 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>de.dopler.ms</groupId>
-  <artifactId>login-server</artifactId>
+  <artifactId>credentials-store</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <properties>
@@ -49,21 +49,14 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-jsonb</artifactId>
     </dependency>
-    <!-- REST client -->
+    <!-- JDBC -->
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-rest-client</artifactId>
+      <artifactId>quarkus-agroal</artifactId>
     </dependency>
-    <!-- JWT -->
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-smallrye-jwt</artifactId>
-    </dependency>
-    <!-- bcrypt -->
-    <dependency>
-      <groupId>org.wildfly.security</groupId>
-      <artifactId>wildfly-elytron-password-impl</artifactId>
-      <version>${wildfly-elytron.version}</version>
+      <artifactId>quarkus-jdbc-h2</artifactId>
     </dependency>
     <!-- annotations -->
     <dependency>
@@ -124,33 +117,5 @@
     </plugins>
   </build>
 
-  <profiles>
-    <profile>
-      <id>native</id>
-      <activation>
-        <property>
-          <name>native</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-maven-plugin</artifactId>
-            <version>${quarkus-plugin.version}</version>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>native-image</goal>
-                </goals>
-                <configuration>
-                  <enableHttpUrlHandler>true</enableHttpUrlHandler>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
+  <!-- no native build: h2 doesn't support it -->
 </project>

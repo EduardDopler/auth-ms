@@ -1,4 +1,4 @@
-package de.dopler.ms.login_server.domain;
+package de.dopler.ms.credentials_store.domain;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 

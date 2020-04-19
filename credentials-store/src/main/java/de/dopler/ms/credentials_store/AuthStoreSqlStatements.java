@@ -1,4 +1,4 @@
-package de.dopler.ms.login_server;
+package de.dopler.ms.credentials_store;
 
 public final class AuthStoreSqlStatements {
 

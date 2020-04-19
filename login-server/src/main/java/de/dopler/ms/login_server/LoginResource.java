@@ -13,10 +13,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.util.Collections;
-import java.util.Optional;
+
+import static de.dopler.ms.server_timings.filter.AbstractServerTimingResponseFilter.SERVER_TIMING_HEADER_NAME;
 
 @Path("/auth")
-@Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class LoginResource {
 
@@ -24,67 +24,74 @@ public class LoginResource {
     private final TokenService tokenService;
 
     @Inject
-    public LoginResource(AuthStoreService authStoreService, @RestClient TokenService tokenService) {
+    public LoginResource(@RestClient AuthStoreService authStoreService,
+            @RestClient TokenService tokenService) {
         this.authStoreService = authStoreService;
         this.tokenService = tokenService;
     }
 
-    @PUT
-    @Path("/db-init")
-    public Response init() {
-        try {
-            authStoreService.initStore();
-        } catch (IllegalStateException e) {
-            return ResponseUtils.textResponse(Status.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
-        return ResponseUtils.response(Status.NO_CONTENT);
-    }
-
     @POST
     @Path("/register")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response register(@QueryParam("no-login") boolean noLogin, Credentials credentials) {
         if (credentials == null) {
             return ResponseUtils.textResponse(Status.BAD_REQUEST, "body has to be non-null");
         }
-        String hashedSecret = PasswordHashUtils.bcryptHash(credentials.secret);
-        Optional<Long> id;
-        try {
-            id = authStoreService.storeCredentials(credentials.uid, hashedSecret);
-        } catch (IllegalArgumentException e) {
-            return ResponseUtils.response(Status.CONFLICT);
+
+        var hashedSecret = PasswordHashUtils.bcryptHash(credentials.secret);
+        var idResponse = authStoreService.storeCredentials(
+                new Credentials(credentials.uid, hashedSecret));
+        var timingCredentials = idResponse.getHeaderString(SERVER_TIMING_HEADER_NAME);
+
+        if (idResponse.getStatusInfo().getFamily() != Status.Family.SUCCESSFUL) {
+            return ResponseUtils.fromResponse(idResponse, idResponse.getStatusInfo().toEnum());
         }
-        if (id.isEmpty()) {
-            return ResponseUtils.response(Status.INTERNAL_SERVER_ERROR);
-        }
+
         if (noLogin) {
-            return ResponseUtils.textResponse(Status.CREATED, id.map(String::valueOf).orElse(""));
+            return ResponseUtils.fromResponse(idResponse, Status.OK);
         }
+        var id = idResponse.readEntity(Long.TYPE);
+
         // retrieve token
-        var user = new User(id.get(), Collections.emptySet());
-        return tokenService.forUser(user);
+        var user = new User(id, Collections.emptySet());
+        var tokenResponse = tokenService.forUser(user);
+        return ResponseUtils.fromResponse(tokenResponse, Status.OK, timingCredentials);
     }
 
     @POST
     @Path("/login")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response login(Credentials credentials) {
         if (credentials == null) {
             return ResponseUtils.textResponse(Status.BAD_REQUEST, "body has to be non-null");
         }
-        Optional<AuthData> authDataOptional;
-        try {
-            authDataOptional = authStoreService.getId(credentials.uid);
-        } catch (IllegalStateException e) {
-            return ResponseUtils.response(Status.INTERNAL_SERVER_ERROR);
+
+        // check credentials
+        var authDataResponse = authStoreService.getAuthData(credentials.uid);
+        var timingCredentials = authDataResponse.getHeaderString(SERVER_TIMING_HEADER_NAME);
+
+        if (authDataResponse.getStatusInfo().getFamily() == Status.Family.SERVER_ERROR) {
+            return ResponseUtils.fromResponse(authDataResponse, Status.INTERNAL_SERVER_ERROR);
         }
-        if (authDataOptional.isEmpty()) {
-            return ResponseUtils.response(Status.UNAUTHORIZED);
+        if (authDataResponse.getStatusInfo().getFamily() == Status.Family.CLIENT_ERROR) {
+            return ResponseUtils.fromResponse(authDataResponse, Status.UNAUTHORIZED);
         }
-        var authData = authDataOptional.get();
+        var authData = authDataResponse.readEntity(AuthData.class);
+
         if (!PasswordHashUtils.verify(authData.secret, credentials.secret)) {
-            return ResponseUtils.response(Status.UNAUTHORIZED);
+            return ResponseUtils.fromResponse(authDataResponse, Status.UNAUTHORIZED);
         }
+
         // retrieve token
         var user = new User(authData.id, authData.groups);
-        return tokenService.forUser(user);
+        var tokenResponse = tokenService.forUser(user);
+
+        if (authDataResponse.getStatusInfo().getFamily() == Status.Family.CLIENT_ERROR) {
+            // as we checked the credentials already, this can only be an error on our side
+            return ResponseUtils.fromResponse(tokenResponse, Status.INTERNAL_SERVER_ERROR,
+                    timingCredentials);
+        }
+
+        return ResponseUtils.fromResponse(tokenResponse, Status.OK, timingCredentials);
     }
 }

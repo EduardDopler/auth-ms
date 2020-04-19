@@ -8,10 +8,12 @@
         <outputRelativeToContentRoot value="true" />
         <module name="login-server" />
         <module name="jwt-server" />
+        <module name="credentials-store" />
         <module name="server-timings" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="credentials-store" target="11" />
       <module name="jwt-server" target="11" />
       <module name="login-server" target="11" />
       <module name="server-timings" target="11" />
