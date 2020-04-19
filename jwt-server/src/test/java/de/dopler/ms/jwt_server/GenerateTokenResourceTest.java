@@ -47,12 +47,11 @@ class GenerateTokenResourceTest {
 
     @Test
     void forUserEndpointHasPrivateCacheControlHeader() {
-        String[] neededValues = {"private", "no-store", "no-cache"};
         // @formatter:off
         givenPostToEndpoint(randomUser()).then()
             .header(HttpHeaders.CACHE_CONTROL,
                     s -> Stream.of(s.split(",")).map(String::trim).toArray(),
-                    arrayContainingInAnyOrder(neededValues));
+                    arrayContainingInAnyOrder("private", "no-store", "no-cache"));
         // @formatter:on
     }
 
