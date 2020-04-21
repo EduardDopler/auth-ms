@@ -20,6 +20,9 @@ import static de.dopler.ms.server_timings.filter.AbstractServerTimingResponseFil
 @Consumes(MediaType.APPLICATION_JSON)
 public class LoginResource {
 
+    private static final int DELAY_CREDENTIALS_MISMATCH_MILLIS = 3000;
+    private static final String RESPONSE_TEXT_CREDENTIALS_MISMATCH = "credentials mismatch";
+
     private final AuthStoreService authStoreService;
     private final TokenService tokenService;
 
@@ -79,7 +82,9 @@ public class LoginResource {
         var authData = authDataResponse.readEntity(AuthData.class);
 
         if (!PasswordHashUtils.verify(authData.secret, credentials.secret)) {
-            return ResponseUtils.fromResponse(authDataResponse, Status.UNAUTHORIZED);
+            delayResponse();
+            return ResponseUtils.textResponse(Status.UNAUTHORIZED,
+                    RESPONSE_TEXT_CREDENTIALS_MISMATCH, timingCredentials);
         }
 
         // retrieve token
@@ -93,5 +98,13 @@ public class LoginResource {
         }
 
         return ResponseUtils.fromResponse(tokenResponse, Status.OK, timingCredentials);
+    }
+
+    private static void delayResponse() {
+        try {
+            Thread.sleep(DELAY_CREDENTIALS_MISMATCH_MILLIS);
+        } catch (InterruptedException e) {
+            // don't propagate; the program can continue running in case of an InterruptedException
+        }
     }
 }
