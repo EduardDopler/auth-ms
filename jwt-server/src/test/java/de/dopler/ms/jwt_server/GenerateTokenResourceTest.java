@@ -1,6 +1,7 @@
 package de.dopler.ms.jwt_server;
 
 import de.dopler.ms.jwt_server.domain.User;
+import de.dopler.ms.jwt_server.services.GenerateTokenService;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -21,7 +22,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static de.dopler.ms.jwt_server.GenerateTokenService.EXPIRATION_ACCESS_TOKEN;
+import static de.dopler.ms.jwt_server.services.GenerateTokenService.EXPIRATION_ACCESS_TOKEN;
 import static de.dopler.ms.jwt_server.utils.ResponseUtils.REFRESH_TOKEN_COOKIE_NAME;
 import static io.restassured.RestAssured.given;
 import static io.restassured.matcher.RestAssuredMatchers.detailedCookie;

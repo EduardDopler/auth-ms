@@ -1,4 +1,4 @@
-package de.dopler.ms.login_server;
+package de.dopler.ms.login_server.services.external;
 
 import de.dopler.ms.login_server.domain.Credentials;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;

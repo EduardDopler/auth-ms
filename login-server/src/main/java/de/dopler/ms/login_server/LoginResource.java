@@ -3,6 +3,8 @@ package de.dopler.ms.login_server;
 import de.dopler.ms.login_server.domain.AuthData;
 import de.dopler.ms.login_server.domain.Credentials;
 import de.dopler.ms.login_server.domain.User;
+import de.dopler.ms.login_server.services.external.AuthStoreService;
+import de.dopler.ms.login_server.services.external.TokenService;
 import de.dopler.ms.login_server.utils.PasswordHashUtils;
 import de.dopler.ms.login_server.utils.ResponseUtils;
 import org.eclipse.microprofile.rest.client.inject.RestClient;

@@ -1,4 +1,4 @@
-package de.dopler.ms.jwt_server;
+package de.dopler.ms.jwt_server.services;
 
 import de.dopler.ms.jwt_server.domain.JwtResponse;
 import io.smallrye.jwt.build.Jwt;

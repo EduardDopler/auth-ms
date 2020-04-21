@@ -1,6 +1,6 @@
 package de.dopler.ms.jwt_server.utils;
 
-import de.dopler.ms.jwt_server.GenerateTokenService;
+import de.dopler.ms.jwt_server.services.GenerateTokenService;
 
 import javax.ws.rs.core.CacheControl;
 

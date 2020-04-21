@@ -1,5 +1,6 @@
 package de.dopler.ms.jwt_server;
 
+import de.dopler.ms.jwt_server.services.GenerateTokenService;
 import de.dopler.ms.jwt_server.utils.ResponseUtils;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 

@@ -1,4 +1,4 @@
-package de.dopler.ms.jwt_server;
+package de.dopler.ms.jwt_server.services;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.time.Clock;

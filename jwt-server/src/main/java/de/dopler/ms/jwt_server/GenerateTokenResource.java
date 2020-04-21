@@ -2,6 +2,7 @@ package de.dopler.ms.jwt_server;
 
 import de.dopler.ms.jwt_server.domain.JwtResponse;
 import de.dopler.ms.jwt_server.domain.User;
+import de.dopler.ms.jwt_server.services.GenerateTokenService;
 import de.dopler.ms.jwt_server.utils.ResponseUtils;
 
 import javax.inject.Inject;
