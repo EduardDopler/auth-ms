@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <option name="BUILD_PROCESS_HEAP_SIZE" value="1200" />
     <annotationProcessing>
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="login-server" />
-        <module name="jwt-server" />
+        <module name="token-store" />
         <module name="credentials-store" />
+        <module name="jwt-server" />
         <module name="server-timings" />
+        <module name="response-utils" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="credentials-store" target="11" />
       <module name="jwt-server" target="11" />
       <module name="login-server" target="11" />
+      <module name="response-utils" target="11" />
       <module name="server-timings" target="11" />
+      <module name="token-store" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="TypeScriptCompiler">

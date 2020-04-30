@@ -7,5 +7,11 @@
       <jdbc-driver>org.h2.Driver</jdbc-driver>
       <jdbc-url>jdbc:h2:file:$PROJECT_DIR$/credentials-store/ms-credentials;AUTO_SERVER=TRUE</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="ms-tokens" uuid="c9d68b4a-f5d0-475d-b044-9968d8a38f42">
+      <driver-ref>h2.unified</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.h2.Driver</jdbc-driver>
+      <jdbc-url>jdbc:h2:file:$PROJECT_DIR$/token-store/ms-tokens;AUTO_SERVER=TRUE</jdbc-url>
+    </data-source>
   </component>
 </project>

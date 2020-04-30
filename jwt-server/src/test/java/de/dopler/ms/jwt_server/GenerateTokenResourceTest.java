@@ -1,7 +1,8 @@
 package de.dopler.ms.jwt_server;
 
 import de.dopler.ms.jwt_server.domain.User;
-import de.dopler.ms.jwt_server.services.GenerateTokenService;
+import de.dopler.ms.jwt_server.utils.GenerateTokenUtils;
+import de.dopler.ms.response_utils.RefreshTokenCookie;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -22,8 +23,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static de.dopler.ms.jwt_server.services.GenerateTokenService.EXPIRATION_ACCESS_TOKEN;
-import static de.dopler.ms.jwt_server.utils.ResponseUtils.REFRESH_TOKEN_COOKIE_NAME;
+import static de.dopler.ms.jwt_server.utils.GenerateTokenUtils.EXPIRATION_ACCESS_TOKEN;
 import static io.restassured.RestAssured.given;
 import static io.restassured.matcher.RestAssuredMatchers.detailedCookie;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -61,16 +61,16 @@ class GenerateTokenResourceTest {
         // @formatter:off
         givenPostToEndpoint(randomUser()).then()
             // Set-Cookie header is set
-            .cookie(REFRESH_TOKEN_COOKIE_NAME)
+            .cookie(RefreshTokenCookie.NAME)
             // a JWT has 3 parts, separated by 2 dots
-            .cookie(REFRESH_TOKEN_COOKIE_NAME, detailedCookie().value(
+            .cookie(RefreshTokenCookie.NAME, detailedCookie().value(
                     stringContainsInOrder(".", ".")))
             // cookie has these cookie properties set
-            .cookie(REFRESH_TOKEN_COOKIE_NAME, detailedCookie().httpOnly(true))
-            .cookie(REFRESH_TOKEN_COOKIE_NAME, detailedCookie().sameSite("Strict"))
-            .cookie(REFRESH_TOKEN_COOKIE_NAME, detailedCookie().path(is(not(equalTo("/")))))
-            .cookie(REFRESH_TOKEN_COOKIE_NAME, detailedCookie().maxAge(
-                    is(equalTo(GenerateTokenService.EXPIRATION_REFRESH_TOKEN))));
+            .cookie(RefreshTokenCookie.NAME, detailedCookie().httpOnly(true))
+            .cookie(RefreshTokenCookie.NAME, detailedCookie().sameSite("Strict"))
+            .cookie(RefreshTokenCookie.NAME, detailedCookie().path(is(not(equalTo("/")))))
+            .cookie(RefreshTokenCookie.NAME, detailedCookie().maxAge(
+                    is(equalTo(GenerateTokenUtils.EXPIRATION_REFRESH_TOKEN))));
         // @formatter:on
     }
 
@@ -110,8 +110,8 @@ class GenerateTokenResourceTest {
         assertThat("expiresAt values in JWT and JSON response object must be equal",
                 expiresAtInJsonResponse, is(equalTo(expiresAtInAccessToken)));
 
-        assertThat(accessToken.getIssuer(), is(equalTo(GenerateTokenService.ISSUER)));
-        assertThat(accessToken.getSubject(), is(equalTo(GenerateTokenService.SUBJECT_ACCESS)));
+        assertThat(accessToken.getIssuer(), is(equalTo(GenerateTokenUtils.ISSUER)));
+        assertThat(accessToken.getSubject(), is(equalTo(GenerateTokenUtils.SUBJECT_ACCESS)));
         assertThat(Long.valueOf(accessToken.getName()), is(equalTo(inputUser.id)));
         assertThat(accessToken.getGroups(), containsInAnyOrder(inputUser.groups.toArray()));
     }

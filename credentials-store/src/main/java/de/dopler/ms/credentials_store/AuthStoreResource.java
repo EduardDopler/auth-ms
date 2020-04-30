@@ -1,6 +1,7 @@
 package de.dopler.ms.credentials_store;
 
 import de.dopler.ms.credentials_store.domain.Credentials;
+import de.dopler.ms.response_utils.ResponseUtils;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -27,9 +28,9 @@ public class AuthStoreResource {
         try {
             authStoreService.initStore();
         } catch (IllegalStateException e) {
-            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+            return ResponseUtils.textResponse(Status.INTERNAL_SERVER_ERROR, e.getMessage());
         }
-        return Response.status(Status.NO_CONTENT).build();
+        return ResponseUtils.status(Status.NO_CONTENT);
     }
 
     @POST
@@ -40,7 +41,7 @@ public class AuthStoreResource {
                     .map(id -> Response.ok(id).build())
                     .orElse(Response.serverError().build());
         } catch (IllegalArgumentException e) {
-            return Response.status(Status.CONFLICT).build();
+            return ResponseUtils.status(Status.CONFLICT);
         }
     }
 
@@ -53,7 +54,7 @@ public class AuthStoreResource {
                     .map(authData -> Response.ok(authData).build())
                     .orElse(Response.status(Status.NOT_FOUND).build());
         } catch (IllegalStateException e) {
-            return Response.serverError().build();
+            return ResponseUtils.status(Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -64,9 +65,11 @@ public class AuthStoreResource {
         try {
             updated = authStoreService.updateUid(id, newUid);
         } catch (IllegalStateException e) {
-            return Response.serverError().build();
+            return ResponseUtils.status(Status.INTERNAL_SERVER_ERROR);
         }
-        return updated ? Response.noContent().build() : Response.status(Status.NOT_FOUND).build();
+        return updated ?
+                ResponseUtils.status(Status.NO_CONTENT) :
+                ResponseUtils.status(Status.NOT_FOUND);
     }
 
     @PUT
@@ -76,9 +79,11 @@ public class AuthStoreResource {
         try {
             updated = authStoreService.updateSecret(id, newSecret);
         } catch (IllegalStateException e) {
-            return Response.serverError().build();
+            return ResponseUtils.status(Status.INTERNAL_SERVER_ERROR);
         }
-        return updated ? Response.noContent().build() : Response.status(Status.NOT_FOUND).build();
+        return updated ?
+                ResponseUtils.status(Status.NO_CONTENT) :
+                ResponseUtils.status(Status.NOT_FOUND);
     }
 
     @PUT
@@ -88,8 +93,10 @@ public class AuthStoreResource {
         try {
             updated = authStoreService.updateGroups(id, newGroups);
         } catch (IllegalStateException e) {
-            return Response.serverError().build();
+            return ResponseUtils.status(Status.INTERNAL_SERVER_ERROR);
         }
-        return updated ? Response.noContent().build() : Response.status(Status.NOT_FOUND).build();
+        return updated ?
+                ResponseUtils.status(Status.NO_CONTENT) :
+                ResponseUtils.status(Status.NOT_FOUND);
     }
 }

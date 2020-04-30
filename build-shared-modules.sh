@@ -1,4 +1,4 @@
-SHARED=(server-timings/pom.xml)
+SHARED=(server-timings/pom.xml response-utils/pom.xml)
 
 # "clean install" all shared modules (in parallel)
 for f in "${SHARED[@]}"; do
@@ -15,8 +15,8 @@ for f in */pom.xml; do
   if [[ " ${SHARED[*]} " =~ \ ${f}\  ]]; then
     continue
   fi
-   echo clean -q -f "$f"
-   mvn clean -q -f "$f" &
+  echo clean -q -f "$f"
+  mvn clean -q -f "$f" &
 done
 
 wait

@@ -2,7 +2,7 @@ package de.dopler.ms.login_server;
 
 import de.dopler.ms.login_server.services.external.AuthStoreService;
 import de.dopler.ms.login_server.utils.PasswordHashUtils;
-import de.dopler.ms.login_server.utils.ResponseUtils;
+import de.dopler.ms.response_utils.ResponseUtils;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 

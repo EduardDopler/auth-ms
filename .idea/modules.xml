@@ -6,7 +6,9 @@
       <module fileurl="file://$PROJECT_DIR$/jwt-server/jwt-server.iml" filepath="$PROJECT_DIR$/jwt-server/jwt-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/login-server/login-server.iml" filepath="$PROJECT_DIR$/login-server/login-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/ms.iml" filepath="$PROJECT_DIR$/.idea/ms.iml" />
+      <module fileurl="file://$PROJECT_DIR$/response-utils/response-utils.iml" filepath="$PROJECT_DIR$/response-utils/response-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/server-timings/server-timings.iml" filepath="$PROJECT_DIR$/server-timings/server-timings.iml" />
+      <module fileurl="file://$PROJECT_DIR$/token-store/token-store.iml" filepath="$PROJECT_DIR$/token-store/token-store.iml" />
     </modules>
   </component>
 </project>

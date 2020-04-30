@@ -6,12 +6,10 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 public class JwtResponse {
 
     public final String accessToken;
-    public final String refreshToken;
     public final long expiresAt;
 
-    public JwtResponse(String accessToken, String refreshToken, long expiresAt) {
+    public JwtResponse(String accessToken, long expiresAt) {
         this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
         this.expiresAt = expiresAt;
     }
 }

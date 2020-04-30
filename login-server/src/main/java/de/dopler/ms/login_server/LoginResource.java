@@ -6,7 +6,7 @@ import de.dopler.ms.login_server.domain.User;
 import de.dopler.ms.login_server.services.external.AuthStoreService;
 import de.dopler.ms.login_server.services.external.TokenService;
 import de.dopler.ms.login_server.utils.PasswordHashUtils;
-import de.dopler.ms.login_server.utils.ResponseUtils;
+import de.dopler.ms.response_utils.ResponseUtils;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.inject.Inject;

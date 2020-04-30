@@ -7,7 +7,11 @@
     <file url="file://$PROJECT_DIR$/jwt-server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/login-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/login-server/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/response-utils/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/response-utils/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/server-timings/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/server-timings/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/token-store/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/token-store/src/main/resources" charset="UTF-8" />
   </component>
 </project>

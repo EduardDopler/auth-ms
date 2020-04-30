@@ -1,49 +1,55 @@
 package de.dopler.ms.jwt_server;
 
 import de.dopler.ms.jwt_server.domain.JwtResponse;
+import de.dopler.ms.jwt_server.domain.TokenData;
 import de.dopler.ms.jwt_server.domain.User;
-import de.dopler.ms.jwt_server.services.GenerateTokenService;
-import de.dopler.ms.jwt_server.utils.ResponseUtils;
+import de.dopler.ms.jwt_server.services.external.TokenStoreService;
+import de.dopler.ms.jwt_server.utils.GenerateTokenUtils;
+import de.dopler.ms.jwt_server.utils.RefreshTokenUtils;
+import de.dopler.ms.response_utils.RefreshTokenCookie;
+import de.dopler.ms.response_utils.ResponseUtils;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
+import static de.dopler.ms.server_timings.filter.AbstractServerTimingResponseFilter.SERVER_TIMING_HEADER_NAME;
 
 @Path("/auth/generate")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class GenerateTokenResource {
 
-    private final GenerateTokenService generateTokenService;
+    private final TokenStoreService tokenStoreService;
 
     @Inject
-    public GenerateTokenResource(GenerateTokenService generateTokenService) {
-        this.generateTokenService = generateTokenService;
+    public GenerateTokenResource(@RestClient TokenStoreService tokenStoreService) {
+        this.tokenStoreService = tokenStoreService;
     }
 
     @POST
     public Response forUser(User user) {
         if (user == null || user.id == null || user.groups == null) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("\"invalid user object\"")
-                    .cacheControl(ResponseUtils.disableCache())
-                    .build();
+            return ResponseUtils.textResponse(Status.BAD_REQUEST, "invalid user object");
         }
 
-        var jwtResponse = generateTokenService.generateJwtTokens(user.id.toString(), user.groups);
+        var tokens = GenerateTokenUtils.generateJwtTokens(user.id, user.groups);
 
-        var cookie = ResponseUtils.cookieForRefreshToken(jwtResponse.refreshToken);
-        // remove refresh token as it is already present in the header
-        var sanitizedJwtResponse = new JwtResponse(jwtResponse.accessToken, null,
-                jwtResponse.expiresAt);
-        return Response.ok(sanitizedJwtResponse)
-                .header(HttpHeaders.SET_COOKIE, cookie)
-                .cacheControl(ResponseUtils.disableCache())
-                .build();
+        var tokenHash = RefreshTokenUtils.toSha256Hash(tokens.refreshToken);
+        var tokenData = new TokenData(user.id, tokenHash, user.groups,
+                tokens.refreshTokenExpiresAt);
+        var storedTokenResponse = tokenStoreService.store(tokenData);
+        var tokenStoreTiming = storedTokenResponse.getHeaderString(SERVER_TIMING_HEADER_NAME);
+
+        var cookie = new RefreshTokenCookie(tokens.refreshToken, tokens.refreshTokenExpiresAt);
+        var jwtResponse = new JwtResponse(tokens.accessToken, tokens.accessTokenExpiresAt);
+
+        return ResponseUtils.jsonResponse(Status.OK, jwtResponse, cookie, tokenStoreTiming);
     }
 }

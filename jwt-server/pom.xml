@@ -22,7 +22,9 @@
     <maven.compiler.release>11</maven.compiler.release>
     <!-- Other dependencies and plugins -->
     <surefire-plugin.version>2.22.1</surefire-plugin.version>
+    <jdt.annotation.version>2.2.400</jdt.annotation.version>
     <server-timings.version>1.0.1</server-timings.version>
+    <response-utils.version>1.0.0-SNAPSHOT</response-utils.version>
   </properties>
 
   <dependencyManagement>
@@ -47,16 +49,32 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-jsonb</artifactId>
     </dependency>
+    <!-- REST client -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-client</artifactId>
+    </dependency>
     <!-- JWT -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-jwt</artifactId>
+    </dependency>
+    <!-- annotations -->
+    <dependency>
+      <groupId>org.eclipse.jdt</groupId>
+      <artifactId>org.eclipse.jdt.annotation</artifactId>
+      <version>${jdt.annotation.version}</version>
     </dependency>
     <!-- other microservices and ms-utils -->
     <dependency>
       <groupId>de.dopler.ms</groupId>
       <artifactId>server-timings</artifactId>
       <version>${server-timings.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>de.dopler.ms</groupId>
+      <artifactId>response-utils</artifactId>
+      <version>${response-utils.version}</version>
     </dependency>
     <!-- Tests -->
     <dependency>
