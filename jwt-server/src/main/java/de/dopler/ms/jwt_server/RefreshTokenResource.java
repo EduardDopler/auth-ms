@@ -56,7 +56,7 @@ public class RefreshTokenResource {
 
         var tokenHash = RefreshTokenUtils.toSha256Hash(jwt.getRawToken());
         var groupsResponse = tokenStoreService.popGroups(userId, tokenHash);
-        var timing = groupsResponse.getHeaderString(SERVER_TIMING_HEADER_NAME);
+        var timingGetGroups = groupsResponse.getHeaderString(SERVER_TIMING_HEADER_NAME);
 
         if (groupsResponse.getStatusInfo().getFamily() == Status.Family.CLIENT_ERROR) {
             var deleteCookie = new RefreshTokenCookie("", 0);
@@ -72,11 +72,12 @@ public class RefreshTokenResource {
 
         var tokenData = new TokenData(userId, newTokenHash, groups, tokens.refreshTokenExpiresAt);
         var storedTokenResponse = tokenStoreService.store(tokenData);
-        var tokenStoreTiming = storedTokenResponse.getHeaderString(SERVER_TIMING_HEADER_NAME);
+        var timingStoreToken = storedTokenResponse.getHeaderString(SERVER_TIMING_HEADER_NAME);
 
         var cookie = new RefreshTokenCookie(tokens.refreshToken, tokens.refreshTokenExpiresAt);
         var jwtResponse = new JwtResponse(tokens.accessToken, tokens.accessTokenExpiresAt);
 
-        return ResponseUtils.jsonResponse(Status.OK, jwtResponse, cookie, timing, tokenStoreTiming);
+        return ResponseUtils.jsonResponse(Status.OK, jwtResponse, cookie, timingGetGroups,
+                timingStoreToken);
     }
 }
