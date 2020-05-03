@@ -39,7 +39,7 @@ public class AuthStoreService {
             statement.execute(SQL_CREATE_INDEX);
             conn.commit();
         } catch (SQLException e) {
-            LOG.error(e.getMessage());
+            LOG.errorf("initStore failed: %s", e.getMessage());
             throw new IllegalStateException("Initializing the store failed due to SQL exception");
         }
     }
@@ -65,7 +65,7 @@ public class AuthStoreService {
             if (e.getSQLState().equals(SQL_STATE_UNIQUE_VIOLATION)) {
                 throw new IllegalArgumentException("conflict");
             }
-            LOG.error(e.getMessage());
+            LOG.errorf("storeCredentials failed: %s", e.getMessage());
         }
         return Optional.empty();
     }
@@ -85,7 +85,7 @@ public class AuthStoreService {
                 }
             }
         } catch (SQLException e) {
-            LOG.error(e.getMessage());
+            LOG.errorf("getAuthData failed: %s", e.getMessage());
             throw new IllegalStateException("getId(uid) failed due to SQL exception");
         }
         return Optional.empty();
@@ -109,7 +109,7 @@ public class AuthStoreService {
             statement.setLong(2, id);
             updatedRows = statement.executeUpdate();
         } catch (SQLException e) {
-            LOG.error(e.getMessage());
+            LOG.errorf("updateGroups failed: %s", e.getMessage());
             throw new IllegalStateException("updateGroups failed due to SQL exception");
         }
         return updatedRows == 1;
@@ -125,7 +125,7 @@ public class AuthStoreService {
             statement.setLong(2, id);
             updatedRows = statement.executeUpdate();
         } catch (SQLException e) {
-            LOG.error(e.getMessage());
+            LOG.errorf("updateStringColumn failed: %s", e.getMessage());
             throw new IllegalStateException("updateStringColumn failed due to SQL exception");
         }
         return updatedRows == 1;
