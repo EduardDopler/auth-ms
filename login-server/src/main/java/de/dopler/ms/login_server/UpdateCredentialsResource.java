@@ -34,7 +34,7 @@ public class UpdateCredentialsResource {
 
     @PUT
     @Path("/{id}/uid")
-    public Response updateUid(@PathParam("id") Long id, String newUid) {
+    public Response updateUid(@PathParam("id") long id, String newUid) {
         if (newUid == null) {
             return ResponseUtils.textResponse(Status.BAD_REQUEST, "body has to be non-null");
         }
@@ -52,7 +52,7 @@ public class UpdateCredentialsResource {
 
     @PUT
     @Path("/{id}/secret")
-    public Response updateSecret(@PathParam("id") Long id, String newSecret) {
+    public Response updateSecret(@PathParam("id") long id, String newSecret) {
         if (newSecret == null) {
             return ResponseUtils.textResponse(Status.BAD_REQUEST, "body has to be non-null");
         }
@@ -72,7 +72,7 @@ public class UpdateCredentialsResource {
     @PUT
     @Path("/{id}/groups")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateGroups(@PathParam("id") Long id, Set<String> groups) {
+    public Response updateGroups(@PathParam("id") long id, Set<String> groups) {
         if (groups == null) {
             return ResponseUtils.textResponse(Status.BAD_REQUEST, "body has to be non-null");
         }

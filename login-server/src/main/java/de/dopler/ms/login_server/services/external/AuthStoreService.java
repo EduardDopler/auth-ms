@@ -27,13 +27,13 @@ public interface AuthStoreService {
 
     @PUT
     @Path("/{id}/uid")
-    Response updateUid(@PathParam("id") Long id, String newUid);
+    Response updateUid(@PathParam("id") long id, String newUid);
 
     @PUT
     @Path("/{id}/secret")
-    Response updateSecret(@PathParam("id") Long id, String newSecret);
+    Response updateSecret(@PathParam("id") long id, String newSecret);
 
     @PUT
     @Path("/{id}/groups")
-    Response updateGroups(@PathParam("id") Long id, Set<String> newGroups);
+    Response updateGroups(@PathParam("id") long id, Set<String> newGroups);
 }

@@ -23,8 +23,7 @@ public final class TokenUtils {
      *     contain the role {@link #ROLE_ADMIN}.</li>
      * </ul>
      */
-    public static boolean isUnauthorizedToChangeData(@Nullable JsonWebToken jwt,
-            @Nullable Long id) {
+    public static boolean isUnauthorizedToChangeData(@Nullable JsonWebToken jwt, long id) {
         if (jwt == null || jwt.getName() == null) {
             return true;
         }

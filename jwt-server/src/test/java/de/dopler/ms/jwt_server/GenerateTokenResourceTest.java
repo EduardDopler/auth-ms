@@ -36,7 +36,7 @@ class GenerateTokenResourceTest {
     private static final URI resourceBaseURI = URI.create("/auth/generate");
 
     @Inject
-    private JWTAuthContextInfo authContextInfo;
+    JWTAuthContextInfo authContextInfo;
 
     @Test
     void forUserEndpointReturnsCode200() {
@@ -118,7 +118,7 @@ class GenerateTokenResourceTest {
 
     @Test
     void forUserEndpointReturnsCode400OnInvalidUser() {
-        User userWithNullId = new User(null, Set.of("group1"));
+        User userWithNullId = new User(0, Set.of("group1"));
         User userWithNullGroups = new User(new Random().nextLong(), null);
         // @formatter:off
         givenPostToEndpoint(userWithNullId).then()

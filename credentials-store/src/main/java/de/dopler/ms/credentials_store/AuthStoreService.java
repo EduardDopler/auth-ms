@@ -91,15 +91,15 @@ public class AuthStoreService {
         return Optional.empty();
     }
 
-    public boolean updateUid(@NonNull Long id, @NonNull String newUid) {
+    public boolean updateUid(long id, @NonNull String newUid) {
         return updateStringColumn(id, newUid, SQL_UPDATE_UID);
     }
 
-    public boolean updateSecret(@NonNull Long id, @NonNull String newSecret) {
+    public boolean updateSecret(long id, @NonNull String newSecret) {
         return updateStringColumn(id, newSecret, SQL_UPDATE_SECRET);
     }
 
-    public boolean updateGroups(@NonNull Long id, @NonNull Set<String> newGroups) {
+    public boolean updateGroups(long id, @NonNull Set<String> newGroups) {
         var updatedRows = 0;
         try (Connection conn = dataSource.getConnection();
              PreparedStatement statement = conn.prepareStatement(SQL_UPDATE_GROUPS)) {
@@ -115,7 +115,7 @@ public class AuthStoreService {
         return updatedRows == 1;
     }
 
-    private boolean updateStringColumn(@NonNull Long id, @NonNull String newValue,
+    private boolean updateStringColumn(long id, @NonNull String newValue,
             @NonNull String sqlUpdateUid) {
         var updatedRows = 0;
         try (Connection conn = dataSource.getConnection();

@@ -36,6 +36,9 @@ public class AuthStoreResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response storeCredentials(Credentials credentials) {
+        if (credentials == null || credentials.uid == null || credentials.secret == null) {
+            return ResponseUtils.textResponse(Status.BAD_REQUEST, "invalid credentials objects");
+        }
         try {
             return authStoreService.storeCredentials(credentials.uid, credentials.secret)
                     .map(id -> Response.ok(id).build())
@@ -60,7 +63,10 @@ public class AuthStoreResource {
 
     @PUT
     @Path("/{id}/uid")
-    public Response updateUid(@PathParam("id") Long id, String newUid) {
+    public Response updateUid(@PathParam("id") long id, String newUid) {
+        if (newUid == null) {
+            return ResponseUtils.textResponse(Status.BAD_REQUEST, "body has to be non-null");
+        }
         boolean updated;
         try {
             updated = authStoreService.updateUid(id, newUid);
@@ -74,7 +80,10 @@ public class AuthStoreResource {
 
     @PUT
     @Path("/{id}/secret")
-    public Response updateSecret(@PathParam("id") Long id, String newSecret) {
+    public Response updateSecret(@PathParam("id") long id, String newSecret) {
+        if (newSecret == null) {
+            return ResponseUtils.textResponse(Status.BAD_REQUEST, "body has to be non-null");
+        }
         boolean updated;
         try {
             updated = authStoreService.updateSecret(id, newSecret);
@@ -88,7 +97,10 @@ public class AuthStoreResource {
 
     @PUT
     @Path("/{id}/groups")
-    public Response updateGroups(@PathParam("id") Long id, Set<String> newGroups) {
+    public Response updateGroups(@PathParam("id") long id, Set<String> newGroups) {
+        if (newGroups == null) {
+            return ResponseUtils.textResponse(Status.BAD_REQUEST, "body has to be non-null");
+        }
         boolean updated;
         try {
             updated = authStoreService.updateGroups(id, newGroups);

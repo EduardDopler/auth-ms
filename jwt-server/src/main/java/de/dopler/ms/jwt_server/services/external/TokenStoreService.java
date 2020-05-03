@@ -22,6 +22,6 @@ public interface TokenStoreService {
     @GET
     @Path("/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    Response popGroups(@PathParam("userId") Long userId,
+    Response popGroups(@PathParam("userId") long userId,
             @QueryParam("token-hash") String tokenHash);
 }

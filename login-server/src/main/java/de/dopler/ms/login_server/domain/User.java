@@ -9,11 +9,11 @@ import java.util.Set;
 @RegisterForReflection
 public class User {
 
-    public final Long id;
+    public final long id;
     public final Set<String> groups;
 
     @JsonbCreator
-    public User(@JsonbProperty("id") Long id, @JsonbProperty("groups") Set<String> groups) {
+    public User(@JsonbProperty("id") long id, @JsonbProperty("groups") Set<String> groups) {
         this.id = id;
         this.groups = groups;
     }

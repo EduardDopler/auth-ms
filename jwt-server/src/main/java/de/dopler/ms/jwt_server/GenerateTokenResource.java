@@ -35,7 +35,7 @@ public class GenerateTokenResource {
 
     @POST
     public Response forUser(User user) {
-        if (user == null || user.id == null || user.groups == null) {
+        if (user == null || user.groups == null) {
             return ResponseUtils.textResponse(Status.BAD_REQUEST, "invalid user object");
         }
 
