@@ -8,17 +8,18 @@ import javax.json.bind.annotation.JsonbProperty;
 @RegisterForReflection
 public class Credentials {
 
-    public final String uid;
+    public final String username;
     public final String secret;
 
     @JsonbCreator
-    public Credentials(@JsonbProperty("uid") String uid, @JsonbProperty("secret") String secret) {
-        this.uid = uid;
+    public Credentials(@JsonbProperty("username") String username,
+            @JsonbProperty("secret") String secret) {
+        this.username = username;
         this.secret = secret;
     }
 
     @Override
     public String toString() {
-        return String.format("Credentials[uid=%s, secret=HIDDEN]", uid);
+        return String.format("Credentials[username=%s, secret=HIDDEN]", username);
     }
 }

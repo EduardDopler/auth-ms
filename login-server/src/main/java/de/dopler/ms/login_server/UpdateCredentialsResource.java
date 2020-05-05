@@ -33,16 +33,16 @@ public class UpdateCredentialsResource {
     }
 
     @PUT
-    @Path("/{id}/uid")
-    public Response updateUid(@PathParam("id") long id, String newUid) {
-        if (newUid == null) {
+    @Path("/{id}/username")
+    public Response updateUsername(@PathParam("id") long id, String newUsername) {
+        if (newUsername == null) {
             return ResponseUtils.textResponse(Status.BAD_REQUEST, "body has to be non-null");
         }
         if (isUnauthorizedToChangeData(jwt, id)) {
             return ResponseUtils.status(Status.FORBIDDEN);
         }
 
-        var response = authStoreService.updateUid(id, newUid);
+        var response = authStoreService.updateUsername(id, newUsername);
         if (response.getStatusInfo().getFamily() == Status.Family.CLIENT_ERROR) {
             // don't leak actual status code to client
             return ResponseUtils.fromResponse(response, Status.BAD_REQUEST);

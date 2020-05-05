@@ -11,33 +11,33 @@ public final class AuthStoreSqlStatements {
     static final String SQL_CREATE_TABLE =
             "CREATE TABLE credentials (" +
                     "  id IDENTITY," +
-                    "  uid VARCHAR(254) UNIQUE," +
+                    "  username VARCHAR(254) UNIQUE," +
                     "  secret CHAR(60)," +
                     "  groups ARRAY NOT NULL DEFAULT ()," +
                     "  last_mod TIMESTAMP WITH TIME ZONE AS CURRENT_TIMESTAMP());";
 
     //language=H2
     static final String SQL_CREATE_INDEX =
-            "CREATE UNIQUE INDEX idx_uid_secret" +
+            "CREATE UNIQUE INDEX idx_username_secret" +
                     "  ON credentials" +
-                    "  (uid, secret);";
+                    "  (username, secret);";
 
     //language=H2
     static final String SQL_INSERT =
             "INSERT INTO credentials" +
-                    "  (uid, secret)" +
+                    "  (username, secret)" +
                     "  VALUES (?, ?);";
 
     //language=H2
     static final String SQL_SELECT =
             "SELECT id, secret, groups FROM credentials" +
                     "  WHERE" +
-                    "  uid = ?;";
+                    "  username = ?;";
 
     //language=H2
-    static final String SQL_UPDATE_UID =
+    static final String SQL_UPDATE_USERNAME =
             "UPDATE credentials" +
-                    "  SET uid = ?" +
+                    "  SET username = ?" +
                     "  WHERE" +
                     "  id = ?;";
 

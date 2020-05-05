@@ -23,6 +23,6 @@ public class AuthData {
 
     @Override
     public String toString() {
-        return String.format("SecretHolder[uid=%s, secret=HIDDEN, groups=%s]", id, groups);
+        return String.format("AuthData[id=%s, secret=HIDDEN, groups=%s]", id, groups);
     }
 }

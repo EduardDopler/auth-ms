@@ -21,13 +21,13 @@ public interface AuthStoreService {
     Response storeCredentials(Credentials credentials);
 
     @GET
-    @Path("/{uid}")
+    @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
-    Response getAuthData(@PathParam("uid") String uid);
+    Response getAuthData(@PathParam("username") String username);
 
     @PUT
-    @Path("/{id}/uid")
-    Response updateUid(@PathParam("id") long id, String newUid);
+    @Path("/{id}/username")
+    Response updateUsername(@PathParam("id") long id, String newUsername);
 
     @PUT
     @Path("/{id}/secret")

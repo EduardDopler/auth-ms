@@ -45,12 +45,12 @@ public class AuthStoreService {
     }
 
     @NonNull
-    public Optional<Long> storeCredentials(@NonNull String uid, @NonNull String hashedSecret) {
+    public Optional<Long> storeCredentials(@NonNull String username, @NonNull String hashedSecret) {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement statement = conn.prepareStatement(SQL_INSERT,
                      Statement.RETURN_GENERATED_KEYS)) {
             conn.setAutoCommit(true);
-            statement.setString(1, uid);
+            statement.setString(1, username);
             statement.setString(2, hashedSecret);
             if (statement.executeUpdate() != 1) {
                 return Optional.empty();
@@ -71,11 +71,11 @@ public class AuthStoreService {
     }
 
     @NonNull
-    public Optional<AuthData> getAuthData(@NonNull String uid) {
+    public Optional<AuthData> getAuthData(@NonNull String username) {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement statement = conn.prepareStatement(SQL_SELECT)) {
             conn.setAutoCommit(true);
-            statement.setString(1, uid);
+            statement.setString(1, username);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     var id = resultSet.getLong(1);
@@ -86,13 +86,13 @@ public class AuthStoreService {
             }
         } catch (SQLException e) {
             LOG.errorf("getAuthData failed: %s", e.getMessage());
-            throw new IllegalStateException("getId(uid) failed due to SQL exception");
+            throw new IllegalStateException("getId(username) failed due to SQL exception");
         }
         return Optional.empty();
     }
 
-    public boolean updateUid(long id, @NonNull String newUid) {
-        return updateStringColumn(id, newUid, SQL_UPDATE_UID);
+    public boolean updateUsername(long id, @NonNull String newUsername) {
+        return updateStringColumn(id, newUsername, SQL_UPDATE_USERNAME);
     }
 
     public boolean updateSecret(long id, @NonNull String newSecret) {
@@ -116,10 +116,10 @@ public class AuthStoreService {
     }
 
     private boolean updateStringColumn(long id, @NonNull String newValue,
-            @NonNull String sqlUpdateUid) {
+            @NonNull String sqlStatement) {
         var updatedRows = 0;
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement statement = conn.prepareStatement(sqlUpdateUid)) {
+             PreparedStatement statement = conn.prepareStatement(sqlStatement)) {
             conn.setAutoCommit(true);
             statement.setString(1, newValue);
             statement.setLong(2, id);

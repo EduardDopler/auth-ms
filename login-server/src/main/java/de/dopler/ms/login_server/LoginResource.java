@@ -45,7 +45,7 @@ public class LoginResource {
 
         var hashedSecret = PasswordHashUtils.bcryptHash(credentials.secret);
         var idResponse = authStoreService.storeCredentials(
-                new Credentials(credentials.uid, hashedSecret));
+                new Credentials(credentials.username, hashedSecret));
         var timingCredentials = idResponse.getHeaderString(SERVER_TIMING_HEADER_NAME);
 
         if (idResponse.getStatusInfo().getFamily() != Status.Family.SUCCESSFUL) {
@@ -72,7 +72,7 @@ public class LoginResource {
         }
 
         // check credentials
-        var authDataResponse = authStoreService.getAuthData(credentials.uid);
+        var authDataResponse = authStoreService.getAuthData(credentials.username);
         var timingCredentials = authDataResponse.getHeaderString(SERVER_TIMING_HEADER_NAME);
 
         if (authDataResponse.getStatusInfo().getFamily() == Status.Family.SERVER_ERROR) {
