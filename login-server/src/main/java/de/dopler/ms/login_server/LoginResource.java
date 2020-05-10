@@ -55,7 +55,8 @@ public class LoginResource {
         if (noLogin) {
             return ResponseUtils.fromResponse(idResponse, Status.OK);
         }
-        var id = idResponse.readEntity(Long.TYPE);
+        var idString = idResponse.readEntity(String.class);
+        var id = Long.parseLong(idString);
 
         // retrieve token
         var user = new User(id, Collections.emptySet());

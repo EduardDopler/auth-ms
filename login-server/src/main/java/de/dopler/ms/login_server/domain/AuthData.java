@@ -1,12 +1,9 @@
 package de.dopler.ms.login_server.domain;
 
-import io.quarkus.runtime.annotations.RegisterForReflection;
-
 import javax.json.bind.annotation.JsonbCreator;
 import javax.json.bind.annotation.JsonbProperty;
 import java.util.Set;
 
-@RegisterForReflection
 public class AuthData {
 
     public final long id;

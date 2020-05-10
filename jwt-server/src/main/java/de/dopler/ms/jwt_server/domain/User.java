@@ -1,12 +1,9 @@
 package de.dopler.ms.jwt_server.domain;
 
-import io.quarkus.runtime.annotations.RegisterForReflection;
-
 import javax.json.bind.annotation.JsonbCreator;
 import javax.json.bind.annotation.JsonbProperty;
 import java.util.Set;
 
-@RegisterForReflection
 public class User {
 
     public final long id;
