@@ -19,6 +19,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import static de.dopler.ms.jwt_server.utils.GenerateTokenUtils.EXPIRATION_REFRESH_TOKEN;
 import static de.dopler.ms.server_timings.filter.AbstractServerTimingResponseFilter.SERVER_TIMING_HEADER_NAME;
 
 @Path("/auth/generate")
@@ -47,7 +48,7 @@ public class GenerateTokenResource {
         var storedTokenResponse = tokenStoreService.store(tokenData);
         var tokenStoreTiming = storedTokenResponse.getHeaderString(SERVER_TIMING_HEADER_NAME);
 
-        var cookie = new RefreshTokenCookie(tokens.refreshToken, tokens.refreshTokenExpiresAt);
+        var cookie = new RefreshTokenCookie(tokens.refreshToken, EXPIRATION_REFRESH_TOKEN);
         var jwtResponse = new JwtResponse(tokens.accessToken, tokens.accessTokenExpiresAt);
 
         return ResponseUtils.jsonResponse(Status.OK, jwtResponse, cookie, tokenStoreTiming);

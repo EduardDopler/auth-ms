@@ -8,8 +8,8 @@ public class RefreshTokenCookie {
 
     public final String value;
 
-    public RefreshTokenCookie(String refreshToken, long expiresAt) {
-        value = String.format(TEMPLATE, NAME, refreshToken, PATH, expiresAt);
+    public RefreshTokenCookie(String refreshToken, long maxAge) {
+        value = String.format(TEMPLATE, NAME, refreshToken, PATH, maxAge);
     }
 
     @Override
