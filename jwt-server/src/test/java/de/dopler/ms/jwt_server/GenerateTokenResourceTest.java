@@ -1,9 +1,12 @@
 package de.dopler.ms.jwt_server;
 
+import de.dopler.ms.jwt_server.domain.TokenData;
 import de.dopler.ms.jwt_server.domain.User;
+import de.dopler.ms.jwt_server.services.external.TokenStoreService;
 import de.dopler.ms.jwt_server.utils.GenerateTokenUtils;
 import de.dopler.ms.response_utils.RefreshTokenCookie;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.smallrye.jwt.auth.principal.DefaultJWTParser;
@@ -11,7 +14,10 @@ import io.smallrye.jwt.auth.principal.JWTAuthContextInfo;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.jwt.auth.principal.ParseException;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.HttpHeaders;
@@ -37,6 +43,16 @@ class GenerateTokenResourceTest {
 
     @Inject
     JWTAuthContextInfo authContextInfo;
+
+    @InjectMock
+    @RestClient
+    TokenStoreService tokenStoreService;
+
+    @BeforeEach
+    public void setup() {
+        Mockito.when(tokenStoreService.store(Mockito.any(TokenData.class)))
+                .thenReturn(javax.ws.rs.core.Response.noContent().build());
+    }
 
     @Test
     void forUserEndpointReturnsCode200() {
@@ -118,11 +134,8 @@ class GenerateTokenResourceTest {
 
     @Test
     void forUserEndpointReturnsCode400OnInvalidUser() {
-        User userWithNullId = new User(0, Set.of("group1"));
         User userWithNullGroups = new User(new Random().nextLong(), null);
         // @formatter:off
-        givenPostToEndpoint(userWithNullId).then()
-            .statusCode(Status.BAD_REQUEST.getStatusCode());
         givenPostToEndpoint(userWithNullGroups).then()
             .statusCode(Status.BAD_REQUEST.getStatusCode());
         // post without body
