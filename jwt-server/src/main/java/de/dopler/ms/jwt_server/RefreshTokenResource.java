@@ -59,6 +59,10 @@ public class RefreshTokenResource {
         var groupsResponse = tokenStoreService.popGroups(userId, tokenHash);
         var timingGetGroups = groupsResponse.getHeaderString(SERVER_TIMING_HEADER_NAME);
 
+        // if no groups were found (404), the JWT info was deleted inside the token store
+        // (e.g. because it expired)
+        // in this case, delete the cookie on the client side (max-age=0 acts as a delete-cookie),
+        // as the refresh token cannot be used anymore, the client has to re-authenticate
         if (groupsResponse.getStatusInfo().getFamily() == Status.Family.CLIENT_ERROR) {
             var deleteCookie = new RefreshTokenCookie("", 0);
             return ResponseUtils.status(Status.BAD_REQUEST, deleteCookie);
