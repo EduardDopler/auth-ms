@@ -39,7 +39,7 @@ public final class TokenStoreSqlStatements {
     static final String SQL_SELECT_GROUPS =
             "SELECT groups FROM tokens" +
                     "  WHERE" +
-                    "  user_id = ? AND token_hash = ?;";
+                    "  user_id = ? AND token_hash = ? AND expires_at > CURRENT_TIMESTAMP(0);";
 
     //language=H2
     static final String SQL_DELETE_EXPIRED =

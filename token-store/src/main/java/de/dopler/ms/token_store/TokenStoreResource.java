@@ -35,7 +35,7 @@ public class TokenStoreResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response storeToken(TokenData tokenData) {
-        if (tokenData == null || tokenData.groups == null) {
+        if (tokenData == null || tokenData.tokenHash == null || tokenData.groups == null) {
             return ResponseUtils.textResponse(Status.BAD_REQUEST, "invalid token object");
         }
 
