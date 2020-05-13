@@ -62,8 +62,8 @@ public class TokenStoreResource {
 
         try {
             return tokenStoreService.popGroups(userId, tokenHash)
-                    .map(groups -> Response.ok(groups).build())
-                    .orElse(Response.status(Status.NOT_FOUND).build());
+                    .map(groups -> ResponseUtils.jsonResponse(Status.OK, groups))
+                    .orElse(ResponseUtils.status(Status.NOT_FOUND));
         } catch (IllegalStateException e) {
             return ResponseUtils.status(Status.INTERNAL_SERVER_ERROR);
         }
