@@ -25,7 +25,7 @@
     <wildfly-elytron.version>1.11.3.Final</wildfly-elytron.version>
     <jdt.annotation.version>2.2.400</jdt.annotation.version>
     <server-timings.version>1.0.1</server-timings.version>
-    <response-utils.version>1.0.0-SNAPSHOT</response-utils.version>
+    <response-utils.version>1.0.0</response-utils.version>
   </properties>
 
   <dependencyManagement>

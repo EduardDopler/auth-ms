@@ -24,7 +24,7 @@
     <surefire-plugin.version>2.22.1</surefire-plugin.version>
     <jdt.annotation.version>2.2.400</jdt.annotation.version>
     <server-timings.version>1.0.1</server-timings.version>
-    <response-utils.version>1.0.0-SNAPSHOT</response-utils.version>
+    <response-utils.version>1.0.0</response-utils.version>
   </properties>
 
   <dependencyManagement>
@@ -98,7 +98,6 @@
     <finalName>${project.artifactId}</finalName>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${compiler-plugin.version}</version>
         <configuration>
