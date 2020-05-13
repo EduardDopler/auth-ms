@@ -84,6 +84,7 @@ class RefreshTokenResourceTest {
     void fromRefreshTokenEndpointHasPrivateCacheControlHeader() {
         // @formatter:off
         givenPostToEndpoint().then()
+            .header(HttpHeaders.CACHE_CONTROL, is(notNullValue()))
             .header(HttpHeaders.CACHE_CONTROL,
                     s -> Stream.of(s.split(",")).map(String::trim).toArray(),
                     arrayContainingInAnyOrder("private", "no-store", "no-cache"));
@@ -152,21 +153,13 @@ class RefreshTokenResourceTest {
     @Test
     void fromRefreshTokenEndpointReturnsCode400OnInvalidTokenSubject() {
         Mockito.when(jwt.getSubject()).thenReturn(SUBJECT_ACCESS);
-
-        // @formatter:off
-        givenPostToEndpoint().then()
-            .statusCode(Status.BAD_REQUEST.getStatusCode());
-        // @formatter:on
+        givenPostToEndpoint().then().statusCode(Status.BAD_REQUEST.getStatusCode());
     }
 
     @Test
     void fromRefreshTokenEndpointReturnsCode400IfUserIdIsNoLong() {
         Mockito.when(jwt.getName()).thenReturn("invalid-user-id");
-
-        // @formatter:off
-        givenPostToEndpoint().then()
-            .statusCode(Status.BAD_REQUEST.getStatusCode());
-        // @formatter:on
+        givenPostToEndpoint().then().statusCode(Status.BAD_REQUEST.getStatusCode());
     }
 
     @Test
@@ -195,10 +188,7 @@ class RefreshTokenResourceTest {
         Mockito.when(tokenStoreService.popGroups(Mockito.anyLong(), Mockito.anyString()))
                 .thenReturn(javax.ws.rs.core.Response.status(Status.INTERNAL_SERVER_ERROR).build());
 
-        // @formatter:off
-        givenPostToEndpoint().then()
-            .statusCode(Status.INTERNAL_SERVER_ERROR.getStatusCode());
-        // @formatter:on
+        givenPostToEndpoint().then().statusCode(Status.INTERNAL_SERVER_ERROR.getStatusCode());
     }
 
     private static Response givenPostToEndpoint() {

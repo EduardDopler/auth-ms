@@ -66,6 +66,7 @@ class GenerateTokenResourceTest {
     void forUserEndpointHasPrivateCacheControlHeader() {
         // @formatter:off
         givenPostToEndpoint(randomUser()).then()
+            .header(HttpHeaders.CACHE_CONTROL, is(notNullValue()))
             .header(HttpHeaders.CACHE_CONTROL,
                     s -> Stream.of(s.split(",")).map(String::trim).toArray(),
                     arrayContainingInAnyOrder("private", "no-store", "no-cache"));
