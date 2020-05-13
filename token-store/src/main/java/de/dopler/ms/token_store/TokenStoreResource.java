@@ -48,7 +48,7 @@ public class TokenStoreResource {
         }
         return stored ?
                 ResponseUtils.status(Status.NO_CONTENT) :
-                ResponseUtils.status(Status.NOT_FOUND);
+                ResponseUtils.status(Status.INTERNAL_SERVER_ERROR);
     }
 
     @GET
