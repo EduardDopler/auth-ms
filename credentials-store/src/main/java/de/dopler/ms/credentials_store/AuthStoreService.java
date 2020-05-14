@@ -125,6 +125,10 @@ public class AuthStoreService {
             statement.setLong(2, id);
             updatedRows = statement.executeUpdate();
         } catch (SQLException e) {
+            // don't log UNIQUE violations
+            if (e.getSQLState().equals(SQL_STATE_UNIQUE_VIOLATION)) {
+                throw new IllegalArgumentException("conflict");
+            }
             LOG.errorf("updateStringColumn failed: %s", e.getMessage());
             throw new IllegalStateException("updateStringColumn failed due to SQL exception");
         }

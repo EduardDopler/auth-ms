@@ -70,6 +70,8 @@ public class AuthStoreResource {
         boolean updated;
         try {
             updated = authStoreService.updateUsername(id, newUsername);
+        } catch (IllegalArgumentException e) {
+            return ResponseUtils.status(Status.CONFLICT);
         } catch (IllegalStateException e) {
             return ResponseUtils.status(Status.INTERNAL_SERVER_ERROR);
         }

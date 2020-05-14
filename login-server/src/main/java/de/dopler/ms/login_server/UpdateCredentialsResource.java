@@ -43,8 +43,11 @@ public class UpdateCredentialsResource {
         }
 
         var response = authStoreService.updateUsername(id, newUsername);
+        if (response.getStatus() == Status.CONFLICT.getStatusCode()) {
+            return ResponseUtils.fromResponse(response, Status.CONFLICT);
+        }
         if (response.getStatusInfo().getFamily() == Status.Family.CLIENT_ERROR) {
-            // don't leak actual status code to client
+            // don't leak actual status code to client (404 Not Found)
             return ResponseUtils.fromResponse(response, Status.BAD_REQUEST);
         }
         return ResponseUtils.fromResponse(response, Status.NO_CONTENT);
@@ -63,7 +66,7 @@ public class UpdateCredentialsResource {
         var hashedSecret = PasswordHashUtils.bcryptHash(newSecret);
         var response = authStoreService.updateSecret(id, hashedSecret);
         if (response.getStatusInfo().getFamily() == Status.Family.CLIENT_ERROR) {
-            // don't leak actual status code to client
+            // don't leak actual status code to client (404 Not Found)
             return ResponseUtils.fromResponse(response, Status.BAD_REQUEST);
         }
         return ResponseUtils.fromResponse(response, Status.NO_CONTENT);
@@ -82,7 +85,7 @@ public class UpdateCredentialsResource {
 
         var response = authStoreService.updateGroups(id, groups);
         if (response.getStatusInfo().getFamily() == Status.Family.CLIENT_ERROR) {
-            // don't leak actual status code to client
+            // don't leak actual status code to client (404 Not Found)
             return ResponseUtils.fromResponse(response, Status.BAD_REQUEST);
         }
         return ResponseUtils.fromResponse(response, Status.NO_CONTENT);
