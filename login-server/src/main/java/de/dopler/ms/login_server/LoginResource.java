@@ -80,6 +80,7 @@ public class LoginResource {
             return ResponseUtils.fromResponse(authDataResponse, Status.INTERNAL_SERVER_ERROR);
         }
         if (authDataResponse.getStatusInfo().getFamily() == Status.Family.CLIENT_ERROR) {
+            delayResponse();
             return ResponseUtils.fromResponse(authDataResponse, Status.UNAUTHORIZED);
         }
         var authData = authDataResponse.readEntity(AuthData.class);
