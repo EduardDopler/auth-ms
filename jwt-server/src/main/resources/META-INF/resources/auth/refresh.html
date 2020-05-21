@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang=en>
+<meta name=viewport content="width=device-width">
+<title>ms.dopler.de :: jwt-server</title>
+<main>
+  <h1>Refresh Token</h1>
+  <form>
+    <button disabled>Refresh Token</button>
+  </form>
+  <label hidden>
+    Response:
+    <textarea readonly></textarea>
+  </label>
+  <button hidden id=copy-token type=button onclick=copyAccessToken()>Copy Access Token</button>
+  <span hidden id=token-expires></span>
+  <label hidden><input id=token></label>
+</main>
+<nav>
+  <ul>
+    <li><a href=generate.html aria-label="go to Generate Token form">→ Generate Token</a>
+  </ul>
+</nav>
+
+<noscript>JavaScript needed.</noscript>
+<script>
+  const submitButton = document.querySelector("form button");
+  const responseTextarea = document.querySelector("textarea");
+  const copyTokenButton = document.querySelector("#copy-token");
+  const tokenInput = document.querySelector("#token");
+  const tokenExpires = document.querySelector("#token-expires");
+
+  function showResult(text = "") {
+    const time = new Date().toLocaleTimeString();
+    responseTextarea.value = `[${time}] ${text}\n\n${responseTextarea.value}`;
+    responseTextarea.parentElement.hidden = false;
+  }
+
+  function showAccessToken(token, expiresAt) {
+    copyTokenButton.hidden = !token;
+    tokenInput.value = token ? token : "";
+    tokenExpires.hidden = !expiresAt;
+    tokenExpires.textContent = expiresAt ? new Date(expiresAt * 1000) : "";
+  }
+
+  function copyAccessToken() {
+    tokenInput.parentElement.hidden = false;
+    tokenInput.select();
+    document.execCommand("copy");
+    tokenInput.parentElement.hidden = true;
+  }
+
+  document.querySelector("form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    submitButton.disabled = true;
+    const response = await fetch("/auth/refresh", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" }
+    });
+    if (!response.ok) {
+      showResult(`${response.status} ${response.statusText} - ${await response.text()}`);
+      showAccessToken(false);
+      submitButton.disabled = false;
+      return;
+    }
+    const responseJson = await response.json();
+    const body = JSON.stringify(responseJson, null, 2);
+    const statusLine = `${response.status} ${response.statusText}\n`;
+    showResult(statusLine + body);
+    showAccessToken(responseJson.accessToken, responseJson.expiresAt);
+    submitButton.disabled = false;
+  });
+  submitButton.disabled = false;
+</script>
+
+<style>
+  nav {
+    margin-block-start: 3rem;
+  }
+
+  main > label:not([hidden]) {
+    display: block;
+    margin-block-start: 2rem;
+  }
+
+  textarea {
+    display: block;
+    width: 100%;
+    height: 10rem;
+    font-family: monospace;
+  }
+
+  #copy-token {
+    margin-top: 1rem;
+  }
+
+  #token-expires {
+    font-size: small;
+  }
+
+  #token-expires:before {
+    content: "(expires at: "
+  }
+
+  #token-expires:after {
+    content: ")"
+  }
+</style>

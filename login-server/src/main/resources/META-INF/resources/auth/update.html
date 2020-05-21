@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang=en>
+<meta name=viewport content="width=device-width">
+<title>ms.dopler.de :: login-server</title>
+<main>
+  <h1>Update Credentials</h1>
+  <form>
+    <label>
+      User ID:
+      <input name=id required autofocus pattern=-?[0-9]+>
+    </label>
+    <label>
+      Property:
+      <select name=property>
+        <option value=username>Username
+        <option value=secret>Password ("secret")
+        <option value=groups>Groups (comma-separated)
+      </select>
+    </label>
+    <label>
+      New Value:
+      <input name=value required autocomplete=off>
+    </label>
+    <label>
+      Access Token:
+      <input name=token required autocomplete=off pattern=[a-zA-Z0-9_-\.]+>
+    </label>
+    <button disabled>Update Property</button>
+  </form>
+  <label hidden>
+    Response:
+    <textarea readonly></textarea>
+  </label>
+</main>
+<nav>
+  <ul>
+    <li><a href=register.html aria-label="go to Register form">→ Register</a>
+    <li><a href=login.html aria-label="go to Login form">→ Login</a>
+  </ul>
+</nav>
+
+<noscript>JavaScript needed.</noscript>
+<script>
+  const submitButton = document.querySelector("form button");
+  const responseTextarea = document.querySelector("textarea");
+
+  function showResult(text = "") {
+    const time = new Date().toLocaleTimeString();
+    responseTextarea.value = `[${time}] ${text}\n\n${responseTextarea.value}`;
+    responseTextarea.parentElement.hidden = false;
+  }
+
+  document.querySelector("form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    submitButton.disabled = true;
+    const id = document.querySelector("form input[name=id]").value;
+    const property = document.querySelector("form select[name=property]").value;
+    const value = document.querySelector("form input[name=value]").value;
+    const token = document.querySelector("form input[name=token]").value;
+    const updateGroups = property === "groups";
+    const fetchOptions = {
+      method: "PUT",
+      headers: { "Content-Type": updateGroups ? "application/json" : "text/plain" }
+    };
+    if (updateGroups) {
+      const groups = value.split(",").map(group => group.trim()).filter(group => !!group);
+      fetchOptions.body = JSON.stringify(groups);
+    } else {
+      fetchOptions.body = value;
+    }
+    fetchOptions.headers = { ...fetchOptions.headers, "Authorization": `Bearer ${token}` };
+    const response = await fetch(`/auth/${id}/${property}`, fetchOptions);
+    const body = await response.text();
+    showResult(`${response.status} ${response.statusText}${body ? " - " + body : ""}`);
+    submitButton.disabled = false;
+  });
+  submitButton.disabled = false;
+</script>
+
+<style>
+  form {
+    display: grid;
+    grid-template-columns: max-content minmax(10rem, 15rem);
+    grid-gap: 1rem;
+  }
+
+  form label {
+    display: contents;
+  }
+
+  form button {
+    grid-column-start: 2;
+  }
+
+  nav {
+    margin-block-start: 3rem;
+  }
+
+  main > label:not([hidden]) {
+    display: block;
+    margin-block-start: 2rem;
+  }
+
+  textarea {
+    display: block;
+    width: 100%;
+    height: 10rem;
+    font-family: monospace;
+  }
+</style>
