@@ -43,6 +43,9 @@ public class RefreshTokenResource {
 
     @POST
     public Response fromRefreshToken() {
+        if (jwt == null || jwt.getTokenID() == null) {
+            return ResponseUtils.textResponse(Status.BAD_REQUEST, "invalid token");
+        }
         if (!GenerateTokenUtils.SUBJECT_REFRESH.equals(jwt.getSubject())) {
             return ResponseUtils.textResponse(Status.BAD_REQUEST, "invalid subject");
         }
