@@ -1,0 +1,13 @@
+FROM adoptopenjdk/openjdk11:ubi-minimal-jre
+WORKDIR /work/
+COPY target/lib /work/lib
+COPY target/*-runner.jar /work/application.jar
+RUN chmod 775 /work
+EXPOSE 8080
+CMD ["java", \
+    "-Dquarkus.http.host=0.0.0.0", \
+    "-Dquarkus.http.port=8080", \
+    "-Dde.dopler.ms.jwt_server.services.external.TokenStoreService/mp-rest/url=http://token-store:8080", \
+    "-jar", \
+    "./application.jar" \
+]

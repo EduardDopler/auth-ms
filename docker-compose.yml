@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  credentials-store:
+    image: credentials-store
+    expose:
+      - "8080"
+  token-store:
+    image: token-store
+    expose:
+      - "8080"
+  jwt-server:
+    image: jwt-server
+    expose:
+      - "8080"
+    depends_on:
+      - token-store
+  login-server:
+    image: login-server
+    ports:
+      - "8080:8080"
+    depends_on:
+      - jwt-server
+      - credentials-store
