@@ -61,6 +61,12 @@ public class LoginResource {
         // retrieve token
         var user = new User(id, Collections.emptySet());
         var tokenResponse = tokenService.forUser(user);
+
+        if (tokenResponse.getStatusInfo().getFamily() != Status.Family.SUCCESSFUL) {
+            return ResponseUtils.fromResponse(tokenResponse,
+                    tokenResponse.getStatusInfo().toEnum());
+        }
+
         return ResponseUtils.fromResponse(tokenResponse, Status.OK, timingCredentials);
     }
 
