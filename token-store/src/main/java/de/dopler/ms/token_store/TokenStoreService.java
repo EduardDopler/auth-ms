@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,6 +31,7 @@ public class TokenStoreService {
     }
 
     public void initStore() {
+        var timingStart = Instant.now();
         try (Connection conn = dataSource.getConnection();
              Statement statement = conn.createStatement()) {
             conn.setAutoCommit(false);
@@ -41,6 +43,8 @@ public class TokenStoreService {
             LOG.errorf("initStore failed: %s", e.getMessage());
             throw new IllegalStateException("Initializing the store failed due to SQL exception");
         }
+        var duration = timingStart.until(Instant.now(), ChronoUnit.MILLIS);
+        LOG.infof("Database initialization succeeded after %d ms", duration);
     }
 
     public boolean put(long userId, @NonNull String tokenHash, @NonNull Set<String> groups,

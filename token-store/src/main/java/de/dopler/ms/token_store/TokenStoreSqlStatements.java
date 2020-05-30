@@ -9,7 +9,7 @@ public final class TokenStoreSqlStatements {
     // @formatter:off
     //language=H2
     static final String SQL_CREATE_TABLE =
-            "CREATE TABLE tokens (" +
+            "CREATE TABLE IF NOT EXISTS tokens (" +
                     "  id IDENTITY," +
                     "  user_id BIGINT NOT NULL," +
                     "  token_hash CHAR(64) NOT NULL," +
@@ -19,13 +19,13 @@ public final class TokenStoreSqlStatements {
 
     //language=H2
     static final String SQL_CREATE_INDEX_USER_ID_TOKEN_HASH =
-            "CREATE INDEX idx_user_id" +
+            "CREATE INDEX IF NOT EXISTS idx_user_id" +
                     "  ON tokens" +
                     "  (user_id, token_hash);";
 
     //language=H2
     static final String SQL_CREATE_INDEX_EXPIRES_AT =
-            "CREATE INDEX idx_expires_at" +
+            "CREATE INDEX IF NOT EXISTS idx_expires_at" +
                     "  ON tokens" +
                     "  (expires_at);";
 

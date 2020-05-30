@@ -9,7 +9,7 @@ public final class AuthStoreSqlStatements {
     // @formatter:off
     //language=H2
     static final String SQL_CREATE_TABLE =
-            "CREATE TABLE credentials (" +
+            "CREATE TABLE IF NOT EXISTS credentials (" +
                     "  id IDENTITY," +
                     "  username VARCHAR(254) UNIQUE," +
                     "  secret CHAR(60)," +
@@ -18,7 +18,7 @@ public final class AuthStoreSqlStatements {
 
     //language=H2
     static final String SQL_CREATE_INDEX =
-            "CREATE UNIQUE INDEX idx_username_secret" +
+            "CREATE UNIQUE INDEX IF NOT EXISTS idx_username_secret" +
                     "  ON credentials" +
                     "  (username, secret);";
 

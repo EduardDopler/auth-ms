@@ -2,7 +2,9 @@ package de.dopler.ms.credentials_store;
 
 import de.dopler.ms.credentials_store.domain.Credentials;
 import de.dopler.ms.response_utils.ResponseUtils;
+import io.quarkus.runtime.StartupEvent;
 
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -20,6 +22,10 @@ public class AuthStoreResource {
     @Inject
     public AuthStoreResource(AuthStoreService authStoreService) {
         this.authStoreService = authStoreService;
+    }
+
+    void onStart(@Observes StartupEvent ev) {
+        authStoreService.initStore();
     }
 
     @PUT

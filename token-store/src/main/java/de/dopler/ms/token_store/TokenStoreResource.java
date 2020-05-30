@@ -2,7 +2,9 @@ package de.dopler.ms.token_store;
 
 import de.dopler.ms.response_utils.ResponseUtils;
 import de.dopler.ms.token_store.domain.TokenData;
+import io.quarkus.runtime.StartupEvent;
 
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -19,6 +21,10 @@ public class TokenStoreResource {
     @Inject
     public TokenStoreResource(TokenStoreService tokenStoreService) {
         this.tokenStoreService = tokenStoreService;
+    }
+
+    void onStart(@Observes StartupEvent ev) {
+        tokenStoreService.initStore();
     }
 
     @PUT
