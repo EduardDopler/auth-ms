@@ -22,7 +22,7 @@ public class ExpiredTokensScheduler {
         this.tokenStoreService = tokenStoreService;
     }
 
-    @Scheduled(every = "5m")
+    @Scheduled(every = "5m", delayed = "1m")
     void deleteExpiredTokens() {
         var startInstant = Instant.now();
         var count = tokenStoreService.deleteExpired();
