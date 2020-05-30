@@ -110,6 +110,13 @@ public class LoginResource {
         return ResponseUtils.fromResponse(tokenResponse, Status.OK, timingCredentials);
     }
 
+    @POST
+    @Path("/refresh")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response refresh(@CookieParam("r_token") String jwtCookie) {
+        return tokenService.fromRefreshToken(jwtCookie);
+    }
+
     private static void delayResponse() {
         try {
             Thread.sleep(DELAY_CREDENTIALS_MISMATCH_MILLIS);

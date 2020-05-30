@@ -1,19 +1,11 @@
 <!DOCTYPE html>
 <html lang=en>
 <meta name=viewport content="width=device-width">
-<title>ms.dopler.de :: login-server</title>
+<title>ms.dopler.de :: jwt-server</title>
 <main>
-  <h1>Login</h1>
+  <h1>Refresh Token</h1>
   <form>
-    <label>
-      Username:
-      <input name=username required autocomplete=username autofocus>
-    </label>
-    <label>
-      Password:
-      <input name=password type=password required autocomplete=current-password>
-    </label>
-    <button disabled>Login</button>
+    <button disabled>Refresh Token</button>
   </form>
   <label hidden>
     Response:
@@ -26,7 +18,7 @@
 <nav>
   <ul>
     <li><a href=register.html aria-label="go to Register form">→ Register</a>
-    <li><a href=refresh.html aria-label="go to Refresh Token form">→ Refresh Token</a>
+    <li><a href=login.html aria-label="go to Login form">→ Login</a>
     <li><a href=update.html aria-label="go to Update Credentials form">→ Update Credentials</a>
   </ul>
 </nav>
@@ -62,13 +54,9 @@
   document.querySelector("form").addEventListener("submit", async (event) => {
     event.preventDefault();
     submitButton.disabled = true;
-    const username = document.querySelector("form input[name=username]").value;
-    const secret = document.querySelector("form input[name=password]").value;
-    const credentials = { username, secret };
-    const response = await fetch("/auth/login", {
+    const response = await fetch("/auth/refresh", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(credentials)
+      headers: { "Content-Type": "application/json" }
     });
     if (!response.ok) {
       showResult(`${response.status} ${response.statusText} - ${await response.text()}`);
@@ -87,20 +75,6 @@
 </script>
 
 <style>
-  form {
-    display: grid;
-    grid-template-columns: max-content minmax(10rem, 15rem);
-    grid-gap: 1rem;
-  }
-
-  form label {
-    display: contents;
-  }
-
-  form button {
-    grid-column-start: 2;
-  }
-
   nav {
     margin-block-start: 3rem;
   }
