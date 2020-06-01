@@ -157,6 +157,12 @@ class RefreshTokenResourceTest {
     }
 
     @Test
+    void fromRefreshTokenEndpointReturnsCode400OnMissingTokenName() {
+        Mockito.when(jwt.getName()).thenReturn(null);
+        givenPostToEndpoint().then().statusCode(Status.BAD_REQUEST.getStatusCode());
+    }
+
+    @Test
     void fromRefreshTokenEndpointReturnsCode400IfUserIdIsNoLong() {
         Mockito.when(jwt.getName()).thenReturn("invalid-user-id");
         givenPostToEndpoint().then().statusCode(Status.BAD_REQUEST.getStatusCode());
