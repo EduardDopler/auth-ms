@@ -7,5 +7,5 @@ CMD ["./application", \
     "-Dquarkus.http.host=0.0.0.0", \
     "-Dquarkus.http.port=8080", \
     "-Dde.dopler.ms.login_server.services.external.TokenService/mp-rest/url=http://jwt-server:8080", \
-    "-Dde.dopler.ms.login_server.services.external.AuthStoreService/mp-rest/url=http://credentials-store:8080" \
+    "-Dde.dopler.ms.login_server.services.external.CredentialsStoreService/mp-rest/url=http://credentials-store:8080" \
 ]

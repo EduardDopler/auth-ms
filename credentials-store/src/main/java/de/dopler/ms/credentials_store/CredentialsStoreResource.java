@@ -15,24 +15,24 @@ import java.util.Set;
 @Path("/auth/credentials")
 @Produces(MediaType.TEXT_PLAIN)
 @Consumes(MediaType.TEXT_PLAIN)
-public class AuthStoreResource {
+public class CredentialsStoreResource {
 
-    private final AuthStoreService authStoreService;
+    private final CredentialsStoreService credentialsStoreService;
 
     @Inject
-    public AuthStoreResource(AuthStoreService authStoreService) {
-        this.authStoreService = authStoreService;
+    public CredentialsStoreResource(CredentialsStoreService credentialsStoreService) {
+        this.credentialsStoreService = credentialsStoreService;
     }
 
     void onStart(@Observes StartupEvent ev) {
-        authStoreService.initStore();
+        credentialsStoreService.initStore();
     }
 
     @PUT
     @Path("/db-init")
     public Response initStore() {
         try {
-            authStoreService.initStore();
+            credentialsStoreService.initStore();
         } catch (IllegalStateException e) {
             return ResponseUtils.textResponse(Status.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -46,7 +46,8 @@ public class AuthStoreResource {
             return ResponseUtils.textResponse(Status.BAD_REQUEST, "invalid credentials objects");
         }
         try {
-            return authStoreService.storeCredentials(credentials.username, credentials.secret)
+            return credentialsStoreService.storeCredentials(credentials.username,
+                    credentials.secret)
                     .map(id -> Response.ok(id).build())
                     .orElse(Response.serverError().build());
         } catch (IllegalArgumentException e) {
@@ -59,7 +60,7 @@ public class AuthStoreResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAuthData(@PathParam("username") String username) {
         try {
-            return authStoreService.getAuthData(username)
+            return credentialsStoreService.getAuthData(username)
                     .map(authData -> Response.ok(authData).build())
                     .orElse(Response.status(Status.NOT_FOUND).build());
         } catch (IllegalStateException e) {
@@ -75,7 +76,7 @@ public class AuthStoreResource {
         }
         boolean updated;
         try {
-            updated = authStoreService.updateUsername(id, newUsername);
+            updated = credentialsStoreService.updateUsername(id, newUsername);
         } catch (IllegalArgumentException e) {
             return ResponseUtils.status(Status.CONFLICT);
         } catch (IllegalStateException e) {
@@ -93,7 +94,7 @@ public class AuthStoreResource {
         }
         boolean updated;
         try {
-            updated = authStoreService.updateSecret(id, newSecret);
+            updated = credentialsStoreService.updateSecret(id, newSecret);
         } catch (IllegalStateException e) {
             return ResponseUtils.status(Status.INTERNAL_SERVER_ERROR);
         }
@@ -110,7 +111,7 @@ public class AuthStoreResource {
         }
         boolean updated;
         try {
-            updated = authStoreService.updateGroups(id, newGroups);
+            updated = credentialsStoreService.updateGroups(id, newGroups);
         } catch (IllegalStateException e) {
             return ResponseUtils.status(Status.INTERNAL_SERVER_ERROR);
         }

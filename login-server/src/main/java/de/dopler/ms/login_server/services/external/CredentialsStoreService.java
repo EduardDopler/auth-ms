@@ -14,7 +14,7 @@ import java.util.Set;
 @Consumes(MediaType.TEXT_PLAIN)
 @Singleton
 @RegisterRestClient
-public interface AuthStoreService {
+public interface CredentialsStoreService {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

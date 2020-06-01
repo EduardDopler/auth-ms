@@ -15,13 +15,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static de.dopler.ms.credentials_store.AuthStoreSqlStatements.*;
+import static de.dopler.ms.credentials_store.CredentialsStoreSqlStatements.*;
 import static java.sql.JDBCType.VARCHAR;
 
 @ApplicationScoped
-public class AuthStoreService {
+public class CredentialsStoreService {
 
-    private static final Logger LOG = Logger.getLogger("AuthStoreService");
+    private static final Logger LOG = Logger.getLogger("CredentialsStoreService");
 
     private static final String SQL_STATE_UNIQUE_VIOLATION = "23505";
 
@@ -29,7 +29,7 @@ public class AuthStoreService {
 
     @SuppressWarnings("CdiInjectionPointsInspection")
     @Inject
-    public AuthStoreService(DataSource dataSource) {
+    public CredentialsStoreService(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 

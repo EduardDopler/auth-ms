@@ -3,7 +3,7 @@ package de.dopler.ms.login_server;
 import de.dopler.ms.login_server.domain.AuthData;
 import de.dopler.ms.login_server.domain.Credentials;
 import de.dopler.ms.login_server.domain.User;
-import de.dopler.ms.login_server.services.external.AuthStoreService;
+import de.dopler.ms.login_server.services.external.CredentialsStoreService;
 import de.dopler.ms.login_server.services.external.TokenService;
 import de.dopler.ms.login_server.utils.PasswordHashUtils;
 import de.dopler.ms.response_utils.ResponseUtils;
@@ -25,13 +25,13 @@ public class LoginResource {
     private static final int DELAY_CREDENTIALS_MISMATCH_MILLIS = 3000;
     private static final String RESPONSE_TEXT_CREDENTIALS_MISMATCH = "credentials mismatch";
 
-    private final AuthStoreService authStoreService;
+    private final CredentialsStoreService credentialsStoreService;
     private final TokenService tokenService;
 
     @Inject
-    public LoginResource(@RestClient AuthStoreService authStoreService,
+    public LoginResource(@RestClient CredentialsStoreService credentialsStoreService,
             @RestClient TokenService tokenService) {
-        this.authStoreService = authStoreService;
+        this.credentialsStoreService = credentialsStoreService;
         this.tokenService = tokenService;
     }
 
@@ -44,7 +44,7 @@ public class LoginResource {
         }
 
         var hashedSecret = PasswordHashUtils.bcryptHash(credentials.secret);
-        var idResponse = authStoreService.storeCredentials(
+        var idResponse = credentialsStoreService.storeCredentials(
                 new Credentials(credentials.username, hashedSecret));
         var timingCredentials = idResponse.getHeaderString(SERVER_TIMING_HEADER_NAME);
 
@@ -79,7 +79,7 @@ public class LoginResource {
         }
 
         // check credentials
-        var authDataResponse = authStoreService.getAuthData(credentials.username);
+        var authDataResponse = credentialsStoreService.getAuthData(credentials.username);
         var timingCredentials = authDataResponse.getHeaderString(SERVER_TIMING_HEADER_NAME);
 
         if (authDataResponse.getStatusInfo().getFamily() == Status.Family.SERVER_ERROR) {

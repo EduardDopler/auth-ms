@@ -1,8 +1,8 @@
 package de.dopler.ms.credentials_store;
 
-public final class AuthStoreSqlStatements {
+public final class CredentialsStoreSqlStatements {
 
-    private AuthStoreSqlStatements() {
+    private CredentialsStoreSqlStatements() {
         // data class
     }
 

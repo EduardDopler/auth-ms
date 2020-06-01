@@ -1,6 +1,6 @@
 package de.dopler.ms.login_server;
 
-import de.dopler.ms.login_server.services.external.AuthStoreService;
+import de.dopler.ms.login_server.services.external.CredentialsStoreService;
 import de.dopler.ms.login_server.utils.PasswordHashUtils;
 import de.dopler.ms.response_utils.ResponseUtils;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -21,14 +21,14 @@ import static de.dopler.ms.login_server.utils.TokenUtils.isUnauthorizedToChangeD
 @Consumes(MediaType.TEXT_PLAIN)
 public class UpdateCredentialsResource {
 
-    private final AuthStoreService authStoreService;
+    private final CredentialsStoreService credentialsStoreService;
     private final JsonWebToken jwt;
 
     @SuppressWarnings("CdiInjectionPointsInspection")
     @Inject
-    public UpdateCredentialsResource(@RestClient AuthStoreService authStoreService,
+    public UpdateCredentialsResource(@RestClient CredentialsStoreService credentialsStoreService,
             JsonWebToken jwt) {
-        this.authStoreService = authStoreService;
+        this.credentialsStoreService = credentialsStoreService;
         this.jwt = jwt;
     }
 
@@ -42,7 +42,7 @@ public class UpdateCredentialsResource {
             return ResponseUtils.status(Status.FORBIDDEN);
         }
 
-        var response = authStoreService.updateUsername(id, newUsername);
+        var response = credentialsStoreService.updateUsername(id, newUsername);
         if (response.getStatus() == Status.CONFLICT.getStatusCode()) {
             return ResponseUtils.fromResponse(response, Status.CONFLICT);
         }
@@ -64,7 +64,7 @@ public class UpdateCredentialsResource {
         }
 
         var hashedSecret = PasswordHashUtils.bcryptHash(newSecret);
-        var response = authStoreService.updateSecret(id, hashedSecret);
+        var response = credentialsStoreService.updateSecret(id, hashedSecret);
         if (response.getStatusInfo().getFamily() == Status.Family.CLIENT_ERROR) {
             // don't leak actual status code to client (404 Not Found)
             return ResponseUtils.fromResponse(response, Status.BAD_REQUEST);
@@ -83,7 +83,7 @@ public class UpdateCredentialsResource {
             return ResponseUtils.status(Status.FORBIDDEN);
         }
 
-        var response = authStoreService.updateGroups(id, groups);
+        var response = credentialsStoreService.updateGroups(id, groups);
         if (response.getStatusInfo().getFamily() == Status.Family.CLIENT_ERROR) {
             // don't leak actual status code to client (404 Not Found)
             return ResponseUtils.fromResponse(response, Status.BAD_REQUEST);
