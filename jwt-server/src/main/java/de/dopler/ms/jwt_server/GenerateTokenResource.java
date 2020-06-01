@@ -49,7 +49,7 @@ public class GenerateTokenResource {
         var tokenStoreTiming = storedTokenResponse.getHeaderString(SERVER_TIMING_HEADER_NAME);
 
         var cookie = new RefreshTokenCookie(tokens.refreshToken, EXPIRATION_REFRESH_TOKEN);
-        var jwtResponse = new JwtResponse(tokens.accessToken, tokens.accessTokenExpiresAt);
+        var jwtResponse = new JwtResponse(user.id, tokens.accessToken, tokens.accessTokenExpiresAt);
 
         return ResponseUtils.jsonResponse(Status.OK, jwtResponse, cookie, tokenStoreTiming);
     }

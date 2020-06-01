@@ -83,7 +83,7 @@ public class RefreshTokenResource {
         var timingStoreToken = storedTokenResponse.getHeaderString(SERVER_TIMING_HEADER_NAME);
 
         var cookie = new RefreshTokenCookie(tokens.refreshToken, EXPIRATION_REFRESH_TOKEN);
-        var jwtResponse = new JwtResponse(tokens.accessToken, tokens.accessTokenExpiresAt);
+        var jwtResponse = new JwtResponse(userId, tokens.accessToken, tokens.accessTokenExpiresAt);
 
         return ResponseUtils.jsonResponse(Status.OK, jwtResponse, cookie, timingGetGroups,
                 timingStoreToken);

@@ -118,6 +118,7 @@ class RefreshTokenResourceTest {
         var maxExpiresAt = expectedExpiresAt + 20;
         // @formatter:off
         givenPostToEndpoint().then()
+            .body("userId", is(equalTo(userId)))
             .body("accessToken", stringContainsInOrder(".", "."))
             .body("refreshToken", is(nullValue()))
             .body("expiresAt", is(greaterThanOrEqualTo(minExpiresAt)))

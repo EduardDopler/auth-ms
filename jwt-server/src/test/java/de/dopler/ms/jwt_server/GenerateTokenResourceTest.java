@@ -93,13 +93,15 @@ class GenerateTokenResourceTest {
 
     @Test
     void forUserEndpointHasGoodJwtResponseInBody() {
+        User inputUser = randomUser();
         int expectedExpiresAt = (int) Instant.now(Clock.systemDefaultZone())
                 .plusSeconds(EXPIRATION_ACCESS_TOKEN)
                 .getEpochSecond();
         var minExpiresAt = expectedExpiresAt - 20;
         var maxExpiresAt = expectedExpiresAt + 20;
         // @formatter:off
-        givenPostToEndpoint(randomUser()).then()
+        givenPostToEndpoint(inputUser).then()
+            .body("userId", is(equalTo(inputUser.id)))
             .body("accessToken", stringContainsInOrder(".", "."))
             .body("refreshToken", is(nullValue()))
             .body("expiresAt", is(greaterThanOrEqualTo(minExpiresAt)))
