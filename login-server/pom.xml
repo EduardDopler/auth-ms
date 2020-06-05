@@ -55,6 +55,11 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-rest-client</artifactId>
     </dependency>
+    <!-- fault tolerance -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
+    </dependency>
     <!-- JWT -->
     <dependency>
       <groupId>io.quarkus</groupId>
