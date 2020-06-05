@@ -19,8 +19,7 @@ import java.security.spec.InvalidKeySpecException;
  */
 public final class PasswordHashUtils {
 
-    private static final WildFlyElytronPasswordProvider PROVIDER =
-            new WildFlyElytronPasswordProvider();
+    private static final WildFlyElytronPasswordProvider PROVIDER = new WildFlyElytronPasswordProvider();
     private static final int ITERATION_COUNT = 10;
 
     private PasswordHashUtils() {

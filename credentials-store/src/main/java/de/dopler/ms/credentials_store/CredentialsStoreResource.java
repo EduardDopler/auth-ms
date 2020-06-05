@@ -82,7 +82,8 @@ public class CredentialsStoreResource {
         } catch (IllegalStateException e) {
             return ResponseUtils.status(Status.INTERNAL_SERVER_ERROR);
         }
-        return updated ? ResponseUtils.status(Status.NO_CONTENT) :
+        return updated ?
+                ResponseUtils.status(Status.NO_CONTENT) :
                 ResponseUtils.status(Status.NOT_FOUND);
     }
 
