@@ -26,6 +26,7 @@ Normally you'd still have a user database with additional user details which you
 - password-based authentication against the JWT server
 - secure (read more on [security](#a-word-on-security))
 - scheduled auto-cleanup of expired tokens
+- Fault tolerance (retry and fallback) for store-service calls
 - `Server-Timing` headers in responses for timing and efficiency tracing
 - lightweight and fast
 - ultra-efficient native (binary) builds possible (no JVM needed)
@@ -205,4 +206,24 @@ Without docker-compose, you also need to create a bridge network. See the [Docke
 
 ## A Word on Security
 
-tbd.
+Obviously, even more so than performance, **security** is a major aspect of an authorization service. That's why the following measures were taken to secure the service and its users:
+
+- the JWTs are **signed** (not encrypted as they hold no secret data)
+- this repo comes with pre-generated keys and certificates
+    - they are **RS256** (RSA signature with SHA-256) which is considered very secure
+    - please generate your own keys and certificates; the existing ones are just for a quickstart
+- all services relying on JWTs not only should check for a valid JWT (this is done automatically by Quarkus/Smallrye which we use here) but also the issuer (see the `mp.jwt.verify.issuer` property)
+    - the microservices here are already configured this way
+- the provided docker-compose file is configured in a way that only the login-server is exposed
+    - the _jwt-server_ should never be reachable by any other service because it generates tokens for the data you hand in, no questions asked
+- only the access token is returned in the HTTP response body; the long-living **refresh token** is returned as a `http-only` and `path`-restricted cookie
+    - that way, it cannot be read via scripting (JavaScript) and is transmitted only to the `/auth` endpoints by the user agent (such cookies are very secure; browser storage is _not_)
+- the access token has a short lifespan of just 15 minutes by default; refreshing that is simple by calling the appropriate endpoint
+- very little data is stored; just the bare minimum to provide the feature set
+    - use your own services to store more user data
+- passwords are **hashed and salted with Bcrypt** before they reach the credentials-store service; the plaintext password provided to the login-server do not get send on to another service
+    - there are no password policies; you may want to install policies in another service which e.g. requires a certain minimal character length for passwords; this service is not the right place for this
+- access control is handled by _groups_: a user credentials entry has a set of groups which allow him/her to access different services
+    - define your own groups for your applications
+    - users created by the `/register` endpoint have no groups assigned
+    - the `ROLE_ADMIN` is a group which is needed to assign groups to a user credentials entry; users (even with a valid access token) _cannot_ change their groups (otherwise they could gain more rights)
