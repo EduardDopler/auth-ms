@@ -1,19 +1,58 @@
 # Authentication Microservices
 
-**_Description_**
+**_A collection of microservices for 🚀-fast and secure JWT-based authentication._**
 
-tbd.
+**🔑 Why?**
+
+Many service architectures (microservice-style or not) need some kind of authentication. Especially when you have stateless services, password-based authentication against each service is cumbersome and often leads to security problems.
+In those cases, **token-based authentication** is helpful. Authenticate your users with a secret (e.g. password) against the JWT service and then use only the trusted tokens generated from it to authenticate against the other services.
+Normally you'd still have a user database with additional user details which you can consult _after_ the JWT service authenticated the user and provided valid tokens.
 
 ---
 
+- [Features](#features)
 - [Architecture](#architecture)
 - [Examples and Usage](#examples-and-usage)
 - [Build and Run](#build-and-run)
 - [A Word on Security](#a-word-on-security)
 
+## Features
+
+- REST services with 3 main endpoints
+    - `/register` for creating a user
+    - `/login` for authenticating a user, i.e. creating tokens for a registered user
+    - `/refresh` for creating a new access token from a refresh ("remember-me") token
+- endpoints for updating stored users (username, secret, roles)
+- password-based authentication against the JWT server
+- secure (read more on [security](#a-word-on-security))
+- scheduled auto-cleanup of expired tokens
+- `Server-Timing` headers in responses for timing and efficiency tracing
+- lightweight and fast
+- ultra-efficient native (binary) builds possible (no JVM needed)
+- ready-to-use Docker compose files
+
 ## Architecture
 
-tbd.
+Each microservice has a single distinct responsibility for easier approachability and maintainability:
+
+- **login-server**
+    - registration, login, re-login and management of user credentials
+    - routes user credentials to/from the `credentials-store` microservice
+    - if the provided credentials match the ones stored in the credentials-store, it consults the `jwt-server` and returns the generated tokens to the caller
+    - routes refresh tokens to the `token-store` to find a match and upon success, consults the jwt-server for a new token pair
+- **jwt-server**
+    - creates access and refresh tokens
+    - consults the `token-store` microservice for storing and retrieving refresh tokens
+    - the only instance with the private key for creating tokens; other services verify these tokens with the corresponding public key 
+- **credentials-store**
+    - stores and updates user credentials (username, id, secret (securely hashed), groups a user belongs to)
+- **token-store**
+    - stores refresh tokens
+    - cleans up expired tokens
+
+**Simplified data flows:**
+
+tbd. (graphs)
 
 ## Examples and Usage
 
@@ -25,10 +64,10 @@ Replace `$HOST` with the host name or IP address the service is running on.
 ```
 curl -XPOST \
      -H "Content-Type: application/json" \
-     -d '{ "username": "john_doe", "secret": "secure-password" }'
+     -d '{ "username": "john_doe", "secret": "secure-password" }' \
      http://$HOST/auth/register
 ```
-Returns the JWT (access token) and its expiration date in the response body, and a refresh token in the `Set-Cookie` header.
+Returns the JWT (access token), its expiration date and the user ID in the response body, and a refresh token in the `Set-Cookie` header.
 This process stores the credentials securely in the database (service: _credentials-store_) as well as the refresh token (service: _token-store_).
 Credentials are stored without any `roles`; you can add them by calling the appropriate REST endpoint, see below.
 
@@ -68,7 +107,7 @@ Groups:
 ```
 curl -XPUT \
      -H "Content-Type: application/json" \
-     -d "[\"ROLE_ADMIN\", \"ROLE_USER\"]" \
+     -d '["ROLE_ADMIN", "ROLE_USER"]' \
      http://$HOST/auth/$USER_ID/groups
 ```
 You need a valid access token with the `ROLE_ADMIN` role to change the groups.
@@ -113,7 +152,7 @@ Without arguments, the `package` goal is assumed, so you'll end up with JAR file
 
 ℹ️ _Note: The first time, you need to run the `build-shared-modules.sh` script which installs the shared modules into your local_ .m2 _directory._
 
-**Manually:** Build with Maven by running the `package` goal in every microservice directory. As shared modules in this project aren't distributed via a Maven repository, you'll need to `install` them locally first.
+**Or manually:** Build with Maven by running the `package` goal in every microservice directory. As shared modules in this project aren't distributed via a Maven repository, you'll need to `install` them locally first.
 
 #### Run
 
@@ -154,7 +193,7 @@ The compose-file only exposes the login-server microservice, via port 8080.
 
 See the `docker-compose.yml` file in the root directory for details.
 
-**Manually:**
+**Or manually:**
 ```
 docker run -i --rm -p $PORT:8080 $SERVICE
 ```
