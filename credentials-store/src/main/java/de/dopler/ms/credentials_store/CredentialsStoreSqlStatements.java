@@ -32,33 +32,38 @@ public final class CredentialsStoreSqlStatements {
     static final String SQL_SELECT =
             "SELECT id, secret, groups FROM credentials" +
                     "  WHERE" +
-                    "  username = ?;";
+                    "  username = ?" +
+                    "  LIMIT 1;";
 
     //language=H2
     static final String SQL_DELETE =
             "DELETE FROM credentials" +
                     "  WHERE" +
-                    "  id = ?;";
+                    "  id = ?" +
+                    "  LIMIT 1;";
 
     //language=H2
     static final String SQL_UPDATE_USERNAME =
             "UPDATE credentials" +
                     "  SET username = ?" +
                     "  WHERE" +
-                    "  id = ?;";
+                    "  id = ?" +
+                    "  LIMIT 1;";
 
     //language=H2
     static final String SQL_UPDATE_SECRET =
             "UPDATE credentials" +
                     "  SET secret = ?" +
                     "  WHERE" +
-                    "  id = ?;";
+                    "  id = ?" +
+                    "  LIMIT 1;";
 
     //language=H2
     static final String SQL_UPDATE_GROUPS =
             "UPDATE credentials" +
                     "  SET groups = ?" +
                     "  WHERE" +
-                    "  id = ?;";
+                    "  id = ?" +
+                    "  LIMIT 1;";
     // @formatter:on
 }
