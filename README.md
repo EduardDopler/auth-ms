@@ -22,14 +22,15 @@ Normally you'd still have a user database with additional user details which you
     - `/register` for creating a user
     - `/login` for authenticating a user, i.e. creating tokens for a registered user
     - `/refresh` for creating a new access token from a refresh ("remember-me") token
-- endpoints for updating stored users (username, secret, roles)
+- endpoints for updating stored users (username, secret, roles) and removing them and their current tokens
 - password-based authentication against the JWT server
 - secure (read more on [security](#a-word-on-security))
 - scheduled auto-cleanup of expired tokens
 - Fault tolerance (retry and fallback) for store-service calls
 - `Server-Timing` headers in responses for timing and efficiency tracing
 - lightweight and fast
-- ultra-efficient native (binary) builds possible (no JVM needed)
+- built with the [Quarkus](https://quarkus.io/) framework
+    - ultra-efficient native (binary) builds possible (no JVM needed)
 - ready-to-use Docker compose files
 
 ## Architecture
@@ -53,7 +54,11 @@ Each microservice has a single distinct responsibility for easier approachabilit
 
 **Simplified data flows:**
 
-tbd. (graphs)
+![API data flow for register endpoint](./docs/img/flow_register.svg)
+
+![API data flow for login endpoint](./docs/img/flow_login.svg)
+
+![API data flow for refresh endpoint](./docs/img/flow_refresh.svg)
 
 ## Examples and Usage
 
