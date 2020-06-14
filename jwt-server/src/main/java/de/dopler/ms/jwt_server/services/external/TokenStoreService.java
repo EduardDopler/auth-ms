@@ -36,6 +36,10 @@ public interface TokenStoreService {
     Response popGroups(@PathParam("userId") long userId,
             @QueryParam("token-hash") String tokenHash);
 
+    @DELETE
+    @Path("/{userId}")
+    Response deleteForUser(@PathParam("userId") long userId);
+
     @SuppressWarnings("unused")
     private static Response storeFallback(TokenData tokenData) {
         LOG.error(STORE_FALLBACK_ERROR_MSG);

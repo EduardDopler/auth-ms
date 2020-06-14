@@ -68,6 +68,20 @@ public class CredentialsStoreResource {
         }
     }
 
+    @DELETE
+    @Path("/{id}")
+    public Response removeCredentials(@PathParam("id") long id) {
+        boolean deleted;
+        try {
+            deleted = credentialsStoreService.removeCredentials(id);
+        } catch (IllegalStateException e) {
+            return ResponseUtils.status(Status.INTERNAL_SERVER_ERROR);
+        }
+        return deleted ?
+                ResponseUtils.status(Status.NO_CONTENT) :
+                ResponseUtils.status(Status.NOT_FOUND);
+    }
+
     @PUT
     @Path("/{id}/username")
     public Response updateUsername(@PathParam("id") long id, String newUsername) {

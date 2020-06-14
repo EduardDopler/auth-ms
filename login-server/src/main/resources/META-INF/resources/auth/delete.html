@@ -3,29 +3,17 @@
 <meta name=viewport content="width=device-width">
 <title>ms.dopler.de :: login-server</title>
 <main>
-  <h1>Update Credentials</h1>
+  <h1>Delete Credentials</h1>
   <form>
     <label>
       User ID:
       <input name=id required autofocus pattern=-?[0-9]+>
     </label>
     <label>
-      Property:
-      <select name=property>
-        <option value=username>Username
-        <option value=secret>Password ("secret")
-        <option value=groups>Groups (comma-separated)
-      </select>
-    </label>
-    <label>
-      New Value:
-      <input name=value required autocomplete=off>
-    </label>
-    <label>
       Access Token:
       <input name=token required autocomplete=off pattern=[a-zA-Z0-9_\.-]+>
     </label>
-    <button disabled>Update Property</button>
+    <button disabled>Delete Credentials</button>
   </form>
   <label hidden>
     Response:
@@ -37,7 +25,6 @@
     <li><a href=register.html aria-label="go to Register form">→ Register</a>
     <li><a href=login.html aria-label="go to Login form">→ Login</a>
     <li><a href=refresh.html aria-label="go to Refresh Token form">→ Refresh Token</a>
-    <li><a href=delete.html aria-label="go to Delete Credentials form">→ Delete Credentials</a>
   </ul>
 </nav>
 
@@ -56,22 +43,15 @@
     event.preventDefault();
     submitButton.disabled = true;
     const id = document.querySelector("form input[name=id]").value;
-    const property = document.querySelector("form select[name=property]").value;
-    const value = document.querySelector("form input[name=value]").value;
     const token = document.querySelector("form input[name=token]").value;
-    const updateGroups = property === "groups";
     const fetchOptions = {
-      method: "PUT",
-      headers: { "Content-Type": updateGroups ? "application/json" : "text/plain" }
+      method: "DELETE",
+      headers: {
+        "Content-Type": "text/plain",
+        "Authorization": `Bearer ${token}`
+      }
     };
-    if (updateGroups) {
-      const groups = value.split(",").map(group => group.trim()).filter(group => !!group);
-      fetchOptions.body = JSON.stringify(groups);
-    } else {
-      fetchOptions.body = value;
-    }
-    fetchOptions.headers = { ...fetchOptions.headers, "Authorization": `Bearer ${token}` };
-    const response = await fetch(`/auth/${id}/${property}`, fetchOptions);
+    const response = await fetch(`/auth/${id}`, fetchOptions);
     const body = await response.text();
     showResult(`${response.status} ${response.statusText}${body ? " - " + body : ""}`);
     submitButton.disabled = false;

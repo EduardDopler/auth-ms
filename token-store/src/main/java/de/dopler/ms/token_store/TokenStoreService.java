@@ -101,6 +101,20 @@ public class TokenStoreService {
         return Optional.of(groups);
     }
 
+    public int deleteForUser(long userId) {
+        var updatedRows = 0;
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement statement = conn.prepareStatement(SQL_DELETE_BY_USER_ID)) {
+            conn.setAutoCommit(true);
+            statement.setLong(1, userId);
+            updatedRows = statement.executeUpdate();
+        } catch (SQLException e) {
+            LOG.errorf("deleteForUser failed: %s", e.getMessage());
+            throw new IllegalStateException("deleteForUser failed due to SQL exception");
+        }
+        return updatedRows;
+    }
+
     public int deleteExpired() {
         var updatedRows = 0;
         try (Connection conn = dataSource.getConnection();

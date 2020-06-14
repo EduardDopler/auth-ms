@@ -96,6 +96,20 @@ public class CredentialsStoreService {
         return Optional.empty();
     }
 
+    public boolean removeCredentials(long id) {
+        var updatedRows = 0;
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement statement = conn.prepareStatement(SQL_DELETE)) {
+            conn.setAutoCommit(true);
+            statement.setLong(1, id);
+            updatedRows = statement.executeUpdate();
+        } catch (SQLException e) {
+            LOG.errorf("removeCredentials failed: %s", e.getMessage());
+            throw new IllegalStateException("removeCredentials failed due to SQL exception");
+        }
+        return updatedRows == 1;
+    }
+
     public boolean updateUsername(long id, @NonNull String newUsername) {
         return updateStringColumn(id, newUsername, SQL_UPDATE_USERNAME);
     }

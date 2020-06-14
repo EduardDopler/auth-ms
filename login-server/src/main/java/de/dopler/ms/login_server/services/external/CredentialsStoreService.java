@@ -28,6 +28,11 @@ public interface CredentialsStoreService {
     @Retry(maxRetries = 1, delay = 3000)
     Response getAuthData(@PathParam("username") String username);
 
+    @DELETE
+    @Path("/{id}")
+    @Retry(maxRetries = 1, delay = 3000)
+    Response removeCredentials(@PathParam("id") long id);
+
     @PUT
     @Path("/{id}/username")
     @Retry(maxRetries = 1, delay = 3000)

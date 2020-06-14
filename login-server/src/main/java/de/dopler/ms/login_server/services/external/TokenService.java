@@ -25,4 +25,11 @@ public interface TokenService {
     @Path("/refresh")
     @Retry(maxRetries = 1, delay = 3000)
     Response fromRefreshToken(@CookieParam("r_token") String refreshToken);
+
+    @DELETE
+    @Path("/remove/{userId}")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Retry(maxRetries = 1, delay = 3000)
+    Response removeTokens(@PathParam("userId") long userId);
 }

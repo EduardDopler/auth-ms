@@ -76,6 +76,18 @@ public class TokenStoreResource {
     }
 
     @DELETE
+    @Path("/{userId}")
+    public Response deleteForUser(@PathParam("userId") long userId) {
+        int deleted;
+        try {
+            deleted = tokenStoreService.deleteForUser(userId);
+        } catch (IllegalStateException e) {
+            return ResponseUtils.status(Status.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseUtils.textResponse(Status.OK, String.valueOf(deleted));
+    }
+
+    @DELETE
     @Path("/expired")
     public Response deleteExpired() {
         int deleted;

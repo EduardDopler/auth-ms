@@ -35,6 +35,12 @@ public final class CredentialsStoreSqlStatements {
                     "  username = ?;";
 
     //language=H2
+    static final String SQL_DELETE =
+            "DELETE FROM credentials" +
+                    "  WHERE" +
+                    "  id = ?;";
+
+    //language=H2
     static final String SQL_UPDATE_USERNAME =
             "UPDATE credentials" +
                     "  SET username = ?" +
