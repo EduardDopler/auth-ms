@@ -20,7 +20,7 @@ import static de.dopler.ms.server_timings.filter.AbstractServerTimingResponseFil
 
 @Path("/auth")
 @Consumes(MediaType.APPLICATION_JSON)
-public class LoginResource {
+public class AuthResource {
 
     private static final int DELAY_CREDENTIALS_MISMATCH_MILLIS = 3000;
     private static final String RESPONSE_TEXT_CREDENTIALS_MISMATCH = "credentials mismatch";
@@ -29,7 +29,7 @@ public class LoginResource {
     private final TokenService tokenService;
 
     @Inject
-    public LoginResource(@RestClient CredentialsStoreService credentialsStoreService,
+    public AuthResource(@RestClient CredentialsStoreService credentialsStoreService,
             @RestClient TokenService tokenService) {
         this.credentialsStoreService = credentialsStoreService;
         this.tokenService = tokenService;
