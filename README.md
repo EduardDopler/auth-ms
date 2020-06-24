@@ -130,7 +130,7 @@ There are multiple ways for building and running these microservices.
     - ❌ noticeable slower startup and shutdown times (ca. 1 s).
 - **[Build and run native binary locally](#build-and-run-native-binary-locally)**
     - ✅ Best runtime performance, little memory usage, native to your platform,
-    - ✅ fastest startup and shutdown (less than 0.01 s),
+    - ✅ fastest startup and shutdown (less than 0.1 s),
     - ✅ no JVM required at runtime, no Docker required.
     - ❌ GraalVM required for compilation,
     - ❌ native builds not portable to other operating systems (rebuild required),
@@ -182,6 +182,8 @@ See the [Quarkus Docs](https://quarkus.io/guides/building-native-image#creating-
 
 ### Build Docker-native Images Locally and Run Inside Docker Container
 
+First, make sure your Docker service is running. Then:
+
 **With the build helper script (recommended):**
 ```
 ./build-microservices.sh package -Pnative -Dquarkus.native.container-build=true
@@ -232,3 +234,4 @@ Obviously, even more so than performance, **security** is a major aspect of an a
     - define your own groups for your applications
     - users created by the `/register` endpoint have no groups assigned
     - the `ROLE_ADMIN` is a group which is needed to assign groups to a user credentials entry; users (even with a valid access token) _cannot_ change their groups (otherwise they could gain more rights)
+    - i.e. by using the normal API endpoints you cannot add admin users to your store; if you need any, you have to add them manually
