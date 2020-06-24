@@ -33,7 +33,7 @@ for pom in */pom.xml; do
 done
 
 # done if no native-container flag present
-if [[ ! " ${GOALS[*]} " =~ ^-Dquarkus\.native\.container.* ]]; then
+if [[ ! " ${GOALS[*]} " =~ \ -Dquarkus\.native\.container.* ]]; then
   exit 0
 fi
 
