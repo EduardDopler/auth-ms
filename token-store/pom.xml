@@ -6,7 +6,7 @@
 
   <groupId>de.dopler.ms</groupId>
   <artifactId>token-store</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0</version>
 
   <properties>
     <!-- Quarkus platform -->
